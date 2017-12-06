@@ -1,0 +1,54 @@
+<include file="Core:Public:header" />
+{:W('Navigation')}
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">员工合同</div>
+		<div class="row-table-body">
+			<p class="form-title"><a class="pull-right btn btn-primary btn-xs" href="{:U('hrm/staffcontract/add')}">添加员工合同</a>员工合同</p>
+			<form action="{:U('hrm/staffcontract/delete')}" method="post">
+			<table class="table" style="margin-bottom:0px;">
+				<tbody>
+					<tr>
+						<th><input type="checkbox" id="check_all" /></th>
+						<th>员工姓名</th>
+						<th>合同名称</th>
+						<th>合同编号</th>
+						<th>合同类型</th>
+						<th>合同状态</th>
+						<th>开始时间</th>
+						<th>截止时间</th>
+						<th>操作</th>
+					</tr>
+					<volist name="contractlist" id="vo">
+					<tr>
+						<td><input type="checkbox" class="check_list" name="staffcontract_id[]" value="{$vo.staffcontract_id}" /></td>
+						<td>{$vo.user_name}</td>
+						<td><a href="{:U('hrm/staffcontract/view','id='.$vo['staffcontract_id'])}">{$vo.name}</a></td>
+						<td>{$vo.number}</td>
+						<td>{:C('contracttype.'.$vo['type'])}</td>
+						<td>{:C('contractstatus.'.$vo['status'])}</td>
+						<td>{$vo.start_time|date='Y-m-d',###}</td>
+						<td>{$vo.end_time|date='Y-m-d',###}</td>
+						<td><a href="{:U('hrm/staffcontract/add','id='.$vo['staffcontract_id'])}">续约</a>&nbsp;|&nbsp;<a href="{:U('hrm/staffcontract/edit','id='.$vo['staffcontract_id'])}">变更</a>&nbsp;|&nbsp;<a href="{:U('hrm/staffcontract/delete','id='.$vo['staffcontract_id'])}">删除</a></td>
+					</tr>
+					</volist>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td><input class="btn btn-primary btn-xs" type="submit" value="删除" /></td>
+						<td colspan="5">{$page}<div class="clear"></div></td>
+					</tr>
+				</tfoot>
+			</table>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+$("#check_all").click(function(){
+	$("input[class='check_list']").prop('checked',$(this).prop('checked'));
+});
+</script>
+<include file="Core:Public:alert" />
+<include file="Core:Public:footer" />

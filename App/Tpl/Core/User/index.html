@@ -1,0 +1,114 @@
+<include file="Public:header" />
+{:W('Navigation')}
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">员工列表</div>
+		<div class="row-table-body">
+			<p class="form-title">
+				<a class="pull-right btn btn-primary btn-xs" href="{:U('core/user/adduser')}">添加员工</a>
+				<volist name="status_array" id="vo">
+				<if condition="$key == $status">{$vo}&nbsp;&nbsp;&nbsp;<else /><a href='{:U("core/user/index","status=$key")}'>{$vo}</a>&nbsp;&nbsp;&nbsp;</if>
+				</volist>
+			</p>
+			<table class="table" style="margin-bottom:0px;">
+				<tbody>
+					<tr>
+						<th>用户名</th>
+						<th>性别</th>
+						<th>部门 - 岗位</th>
+						<th>员工状态</th>
+						<th>员工类型</th>
+						<th>工作状态</th>
+						<th>手机</th>
+						<th>Email</th>
+						<th>操作</th>
+					</tr>
+					<volist name="userlist" id="vo">
+					<tr>
+						<td>{$vo.name}</td>
+						<td><if condition="$vo['sex'] == 1">男<elseif condition="$vo['sex'] == 2" />女<else />未知</if></td>
+						<td>{$vo.department_name} - {$vo.position_name}</td>
+						<td><if condition="$vo['status'] == 0">未激活<elseif condition="$vo['status'] == 1" />在职<elseif condition="$vo['status'] == 2" />离职<else />退休</if></td>
+						<td><if condition="$vo['type'] == 0">试用期<elseif condition="$vo['type'] == 1" />正式工<elseif condition="$vo['type'] == 2" />临时工<else />其他</if></td>
+						<td>
+							<if condition="$vo['work_status'] == 0">
+								正常
+							<elseif condition="$vo['work_status'] == 1" />
+								休假
+							<elseif condition="$vo['work_status'] == 2" />
+								出差
+							<elseif condition="$vo['work_status'] == 3" />
+								请假
+							<elseif condition="$vo['work_status'] == 4" />
+								调休
+							</if>
+						</td>
+						<td>{$vo.telephone}</td>
+						<td>{$vo.email}</td>
+						<td>
+							<a href="{:U('core/user/editinfo','id='.$vo['user_id'])}">编辑</a>&nbsp;|&nbsp;
+							<a href="{:U('hrm/staffcontract/index','user_id='.$vo['user_id'])}">人事合同</a>&nbsp;|&nbsp;
+							<a href="{:U('hrm/archives/view','user_id='.$vo['user_id'])}">人事档案</a>&nbsp;|&nbsp;
+							<a href="javascript:void(0);" class="punch_in" rel="{$vo.user_id}" value="0">上班打卡</a>&nbsp;|&nbsp;
+							<a href="javascript:void(0);" class="punch_out" rel="{$vo.user_id}" value="1">下班打卡</a>
+						</td>
+					</tr>
+					</volist>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td colspan="9">{$page}<div class="clear"></div></td>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+	/**
+	 * Ajax上班打卡
+	 * 
+	**/
+	$('.punch_in').click(function(){
+		var user_id = $(this).attr('rel');
+		var punch_type = $(this).attr('value');
+
+		$.ajax({
+			type: "POST",
+			dataType: "JSON",
+			url: "{:U('hrm/punch/add')}",
+			data: {user_id : user_id, punch_type : punch_type},
+			success: function (data) {
+				alert(data.info);
+			},
+			error: function(data) {
+				alert(data.info);
+			}
+		});
+	});
+	
+	/**
+	 * Ajax下班打卡
+	 * 
+	**/
+	$('.punch_out').click(function(){
+		var user_id = $(this).attr('rel');
+		var punch_type = $(this).attr('value');
+
+		$.ajax({
+			type: "POST",
+			dataType: "JSON",
+			url: "{:U('hrm/punch/add')}",
+			data: {user_id : user_id, punch_type : punch_type},
+			success: function (data) {
+				alert(data.info);
+			},
+			error: function(data) {
+				alert(data.info);
+			}
+		});
+	});
+</script>
+<include file="Public:alert" />
+<include file="Public:footer" />

@@ -1,0 +1,105 @@
+<include file="Core:Public:header" />
+{:W('Navigation')}
+<script src="__PUBLIC__/js/datepicker/WdatePicker.js"></script>
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">考勤日报表</div>
+		<div class="row-table-body">
+			<p class="form-title">考勤日报表
+				<form name="form1"  action="{:U('hrm/attendancesheet/daily')}" method="post">
+					<div class="form-inline">
+						选择对象:<input type="text" name="user_name" class="form-control" id="to_name" value="{$_POST['user_name']}" placeHolder="支持模糊搜索..."/>
+						<a href="javascript:void(0);"><img src="__PUBLIC__/img/search.png" width="25px" id="user_search" /></a>
+						<input type="checkbox" name="status[]" checked="checked" value="1"/>在职&nbsp;&nbsp;
+						<input type="checkbox" name="status[]" checked="checked" value="2"/>离职&nbsp;&nbsp;
+						<input type="checkbox" name="status[]" checked="checked" value="3"/>退休&nbsp;&nbsp;
+						日期:
+						<input type="text" name="start_time" class="form-control" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="{$_POST['start_time']|default = date('Y-m-d')}"/>&nbsp;&nbsp;
+						工作状态:
+						<input type="checkbox" name="work_status[]" checked="checked" value="0"/>正常&nbsp;&nbsp;
+						<input type="checkbox" name="work_status[]" checked="checked" value="1"/>休假&nbsp;&nbsp;
+						<input type="checkbox" name="work_status[]" checked="checked" value="2"/>出差&nbsp;&nbsp;
+						<input type="checkbox" name="work_status[]" checked="checked" value="3"/>请假&nbsp;&nbsp;
+						<input type="checkbox" name="work_status[]" checked="checked" value="4"/>调休&nbsp;&nbsp;
+						<span><input type="submit" class="btn btn-primary" value="查询"/></span>
+					</div>
+				</form>
+			</p>
+			<if condition="empty($daily)">
+				<div>---暂无数据---</div>
+			<else />
+			<form class="form-horizontal " id="form1"  method="post">
+				<table class="table" style="margin-bottom:0px;">
+					<tbody>
+						<tr>
+							<th>姓名</th>
+							<th>日期</th>
+							<th>应上</th>
+							<th>应下</th>
+							<th>实上</th>
+							<th>实下</th>
+							<th>状态</th>
+						</tr>
+						<volist name="daily" id="vo">
+						<tr>
+							<td>{$vo.name}</td>
+							<td>{$_POST['start_time']}</td>
+							<td>{$vo.working_shift.start_time|date='H:i',###}</td>
+							<td>{$vo.working_shift.end_time|date='H:i',###}</td>
+							<td>
+								<volist name="vo['punch']" id="sub">
+									<if condition="'0' eq $sub['type']">
+										{$sub.create_time|date='H:i',###}
+									</if>
+								</volist>
+							</td>
+							<td>
+								<volist name="vo['punch']" id="sub">
+									<if condition="'1' eq $sub['type']">
+										{$sub.create_time|date='H:i',###}
+									</if>
+								</volist>
+							</td>
+							<td>
+								<if condition="'0' eq $vo['work_status']">
+									正常
+								<elseif condition="'1' eq $vo['work_status']"/>
+									休假
+								<elseif condition="'2' eq $vo['work_status']"/>
+									出差
+								<elseif condition="'3' eq $vo['work_status']"/>
+									请假
+								<elseif condition="'4' eq $vo['work_status']"/>
+									调休
+								<else/>
+									<span style="color:#999;">休息</span>
+								</if>
+							</td>
+						</tr>
+						</volist>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td colspan="10" align="center">{$page}<div class="clear"></div></td>
+						</tr>
+					</tfoot>
+				</table>
+			</form>
+			</if>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+	/**
+	 * 选择对象
+	 **/
+	$('#user_search').click(function(){
+		$('#alert').modal({
+			show:true,
+			remote:'{:U("core/user/getuserrindex","self=1")}'
+		});
+	});
+</script>
+<include file="Core:Public:alert" />
+<include file="Core:Public:footer" />

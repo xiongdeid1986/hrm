@@ -1,0 +1,40 @@
+<include file="Public:header" />
+{:W('Navigation')}
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">任务</div>
+		<div class="row-table-body">
+			<p class="form-title"><a class="pull-right btn btn-primary btn-xs" href="{:U('core/task/add')}">添加任务</a>{$taday}任务&nbsp;&nbsp;<a href="{:U('core/task/index')}">全部任务</a></p>
+			<table class="table" style="margin-bottom:0px;">
+				<tbody>
+					<tr>
+						<th>任务主题</th>
+						<th>主要执行人</th>
+						<th>状态</th>
+						<th>等级</th>
+						<th>开始日期</th>
+						<th>截止日期</th>
+						<th>操作</th>
+					</tr>
+					<volist name="tasklist" id="vo">
+					<tr>
+						<td><a href="{:U('core/task/view','id='.$vo['task_id'])}">{$vo.name}</td>
+						<td>{$vo.executor_name}</td>
+						<td>{$vo.status}</td>
+						<td><if condition="$vo['level'] eq 1">普通<elseif condition="$vo['level'] eq 2"/>紧急<else />闲时处理</if></td>
+						<td>{$vo.start_time|date='Y-m-d H:i',###}</td>
+						<td>{$vo.end_time|date='Y-m-d H:i',###}</td>
+						<td>
+							<a href="{:U('core/task/edit','id='.$vo['task_id'])}">编辑</a>&nbsp;|&nbsp;
+							<a href="{:U('core/task/delete','id='.$vo['task_id'])}">删除</a>
+						</td>
+					</tr>
+					</volist>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<include file="Public:alert" />
+<include file="Public:footer" />

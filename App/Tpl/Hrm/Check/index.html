@@ -1,0 +1,41 @@
+<include file="Core:Public:header" />
+{:W('Navigation')}
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">考核模板列表</div>
+		<div class="row-table-body">
+			<p class="form-title">
+				<a class="pull-right btn btn-primary btn-xs" href="{:U('hrm/check/add')}">添加考核模板</a>考核模板列表
+			</p>
+			<table class="table" style="margin-bottom:0px;">
+				<tbody>
+					<tr>
+						<th>名称</th>
+						<th>描述</th>
+						<th>时间</th>
+						<th>操作</th>
+					</tr>
+					<volist name="list" id="vo">
+					<tr>
+						<td>{$vo.title}</td>
+						<td>{$vo.description}</td>
+						<td>{$vo.create_time}</td>
+						<td>
+							<a href="{:U('hrm/check/edit','id='.$vo['check_template_id'])}">编辑</a>&nbsp;|&nbsp;
+							<a href="{:U('hrm/check/delete','id='.$vo['check_template_id'])}">删除</a>
+						</td>
+					</tr>
+					</volist>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td colspan="7">{$page}<div class="clear"></div></td>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<include file="Core:Public:alert" />
+<include file="Core:Public:footer" />

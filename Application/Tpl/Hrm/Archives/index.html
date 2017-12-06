@@ -1,0 +1,59 @@
+<include file="Core:Public:header" />
+{:W('Navigation')}
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">员工档案列表</div>
+		<div class="row-table-body">
+			<p class="form-title">
+				<a class="pull-right btn btn-primary btn-xs" href="{:U('hrm/archives/add')}">添加档案</a>员工档案列表
+			</p>
+			<table class="table" style="margin-bottom:0px;">
+				<form action="{:U('hrm/archives/delete')}" method="post">
+				<tbody>
+					<tr>
+						<th><input type="checkbox" id="check_all"/></th>
+						<th>档案编号</th>
+						<th>姓名</th>
+						<th>性别</th>
+						<th>出生日期</th>
+						<th>婚姻状态</th>
+						<th>工作年限</th>
+						<th>操作</th>
+					</tr>
+					<volist name="list" id="vo">
+					<tr>
+						<td><input type="checkbox" name="user_id[]" value="{$vo.user_id}" class="check_list"></td>
+						<td>{$vo.archives_num}</td>
+						<td><a href="{:U('hrm/archives/view','user_id='.$vo['user_id'])}">{$vo.username}</a></td>
+						<td><if condition="$vo['sex'] == 1">男<elseif condition="$vo['sex'] == 2" />女<else />未知</if></td>
+						<td>{$vo.birthday|date="Y-m-d",###}</td>
+						<td><if condition="$vo['marital_status'] == 1">已婚<elseif condition="$vo['marital_status'] == 2" />未婚<else />未知</if></td>
+						<td>{$vo.length_work}</td>
+						<td>
+							<a href="{:U('hrm/archives/edit','user_id='.$vo['user_id'])}">编辑</a>&nbsp;|&nbsp;
+							<a href="{:U('hrm/archives/delete','user_id='.$vo['user_id'])}">删除</a>
+						</td>
+					</tr>
+					</volist>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td><input type="submit" value="删除" class="btn btn-primary btn-xs"></td>
+						<td colspan="7">{$page}<div class="clear"></div></td>
+					</tr>
+				</tfoot>
+				</form>
+			</table>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+$(function(){
+	$("#check_all").click(function(){
+		$("input[class='check_list']").prop('checked',$(this).prop('checked'));
+	});
+}); 
+</script>
+<include file="Core:Public:alert" />
+<include file="Core:Public:footer" />

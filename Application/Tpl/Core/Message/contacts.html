@@ -1,0 +1,91 @@
+<include file="Public:header" />
+{:W('Navigation')}
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">通讯录</div>
+		<div class="row-table-body">
+			<p class="form-title">
+				<if condition="$type==1"><a href="{:U('core/message/addcontacts')}" class="pull-right btn btn-primary btn-xs">添加</a></if>
+				<if condition="$type==0">公共通讯录<else /><a href="{:U('core/message/contacts')}">公共通讯录</a></if>&nbsp;&nbsp;
+				<if condition="$type==1">个人通讯录<else /><a href="{:U('core/message/contacts','type=1')}">个人通讯录</a></if>
+			</p>
+			<table class="table" style="margin-bottom:0px;">
+				<if condition="$type==1">
+				<form action="{:U('core/message/deletecontacts')}" method="post">
+				</if>
+				<tbody>
+					<tr>
+						<if condition="$type==1">
+						<th><input type="checkbox" id="check_all"/></th>
+						</if>
+						<th>姓名</th>
+						<th>性别</th>
+						<if condition="$type==0">
+						<th>部门 - 岗位</th>
+						<th>员工状态</th>
+						<th>员工类型</th>
+						<th>工作状态</th>
+						</if>
+						<th>手机</th>
+						<th>Email</th>
+						<th>联系地址</th>
+						<if condition="$type==1">
+						<th>备注</th>
+						</if>
+						<th>操作</th>
+					</tr>
+					<volist name="userlist" id="vo">
+					<tr>
+						<if condition="$type==1">
+						<td><input type="checkbox" name="mycontacts_id[]" value="{$vo.mycontacts_id}" class="check_list"></td>
+						</if>
+						<td>{$vo.name}</td>
+						<td><if condition="$vo['sex'] == 1">男<elseif condition="$vo['sex'] == 2" />女<else />未知</if></td>
+						<if condition="$type==0">
+						<td>{$vo.department_name} - {$vo.position_name}</td>
+						<td><if condition="$vo['status'] == 0">未激活<elseif condition="$vo['sex'] == 1" />在职<elseif condition="$vo['sex'] == 2" />离职<else />退休</if></td>
+						<td><if condition="$vo['type'] == 0">试用期<elseif condition="$vo['sex'] == 1" />正式工<elseif condition="$vo['sex'] == 2" />临时工<else />其他</if></td>
+						<td><if condition="$vo['type'] == 0">正常<elseif condition="$vo['sex'] == 1" />休假<elseif condition="$vo['sex'] == 2" />出差<else />其他</if></td>
+						</if>
+						<td>{$vo.telephone}</td>
+						<td>{$vo.email}</td>
+						<td>{$vo.address}</td>
+						<if condition="$type==1">
+						<td>{$vo.description}</td>
+						</if>
+						<td>
+							<if condition="$type==1">
+							<a href="{:U('core/message/editcontacts','id='.$vo['mycontacts_id'])}">编辑</a>&nbsp;&nbsp;
+							<a href="{:U('core/message/deletecontacts','id='.$vo['mycontacts_id'])}">删除</a>
+							<else />
+							<a href="{:U('core/message/send','user_id='.$vo['user_id'])}">发送站内信</a>
+							</if>
+							</td>
+					</tr>
+					</volist>
+				</tbody>
+				<tfoot>
+					<tr>
+						<if condition="$type==1">
+						<td><input type="submit" value="删除" class="btn btn-primary btn-xs"></td>
+						<td colspan="7">{$page}<div class="clear"></div></td>
+						<else />
+						<td colspan="10">{$page}<div class="clear"></div></td>
+						</if>
+						
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+$(function(){
+	$("#check_all").click(function(){
+		$("input[class='check_list']").prop('checked',$(this).prop('checked'));
+	});
+}); 
+</script>
+<include file="Public:alert" />
+<include file="Public:footer" />

@@ -1,0 +1,137 @@
+<div class="navbar-logo">
+	<a href="{:U('core/index/index')}"><img class="img-responsive" src="{:C('defaultinfo.logo')}" alt="悟空HRMS"></a>
+</div>
+<div class="nav-top">
+	<ul class="list-unstyled navbar-bg">
+		<volist name="navigation" id="vo">
+			<li <if condition="in_array($info['control_id'],$vo['control_ids'])">class="active"</if> >
+				<a href="{$vo['default_control']['url']}">{$vo.name}</a>
+			</li>
+		</volist>
+		
+	</ul>
+	<ul class="list-unstyled pull-right navbar-bg navbar-none">
+		<li>
+			{:session('name')}, <span>您有<a href="{:U('core/message/index')}"><span id="message_tips">0</span></a>条新消息</span><span id="message_audio" style="display:none;"></span>
+		</li>
+		<li>
+			<a href="{:U('core/user/logout')}">[退出]</a>
+		</li>
+	</ul>
+	<div class="clear"></div>
+</div>
+<div class="bread-box">
+	<div class="pull-right top-date" id="top-date"></div>
+	<ul class="list-unstyled breadcrumb-hear">
+		<li></li>
+		<li>{:C('APP_GROUP_NAME.'.strtolower(GROUP_NAME))}</li>
+		<li>{$module[strtolower(MODULE_NAME)]}</li>
+		<li class="active">{$control[$info['control_id']]['name']}</li>
+	</ul>
+</div>
+<script type="text/javascript">
+	$(function(){
+		var nongli = drawCld({:date('Y,m,d')});
+		$('#top-date').html(nongli.sYear+'年'+nongli.sMonth+'月'+nongli.sDay+'日星期'+nongli.week+'&nbsp;&nbsp;农历'+(nongli.isLeap?'闰 ':'')+nongli.lMonth+'月'+nongli.lDay+(nongli.solarTerms?'【'+nongli.solarTerms+'】':''));
+	});
+</script>
+<div class="body-left" id="accordion">
+	<volist name="navigation" id="vo">
+	<div class="panel nav-left">
+		<div class="collapse-title <if condition="!in_array($info['control_id'],$vo['control_ids'])">collapsed</if>" data-toggle="collapse" data-parent="#accordion" data-target="#collapse{$vo.navigation_id}">
+			{$vo.name}
+		</div>
+		<div id="collapse{$vo.navigation_id}" class="panel-collapse collapse-body <if condition="in_array($info['control_id'],$vo['control_ids'])">in<else/>collapse</if>">
+			<volist name="vo.controls" id="v">
+			<if condition="$v['is_display'] == 1">
+			<div class="left-col"><a href="{$v['url']}" is="{$v}">{$v['name']}</a></div>
+			</if>
+			</volist>
+			<div class="clear"></div>
+		</div>
+	</div>
+	</volist>
+	<div id="calendar" class="row-table">
+		<div class="row-table-title">日历</div>
+		<div class="row-body">
+			<div id="date" class="cdate">
+				<a id="preMonth" title="上一年"><img src="__PUBLIC__/img/calendar_n1.png"></a>
+				<a id="preYear" title="上一月"><img src="__PUBLIC__/img/calendar_n2.png"></a>
+				<span class="selectDate">
+					<span class="selectY"></span>年<span class="selectM"></span>月
+				</span>
+				<a id="nextYear" title="下一月"><img src="__PUBLIC__/img/calendar_p2.png"></a>
+				<a id="nextMonth" title="下一年"><img src="__PUBLIC__/img/calendar_p1.png"></a>
+			</div>
+			<table id="calTable" class='calTable'>
+				<thead>
+					<tr>
+						<th>日</th>
+						<th>一</th>
+						<th>二</th>
+						<th>三</th>
+						<th>四</th>
+						<th>五</th>
+						<th>六</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+					</tr>
+					<tr>
+						<td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+					</tr>
+					<tr>
+						<td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+					</tr>
+					<tr>
+						<td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+					</tr>
+					<tr>
+						<td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+					</tr>
+					<tr>
+						<td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	new Calendar("calTable", "date", {:date('Y')}, {:date('m')}, '{:U("core/task/ajaxmonth")}');
+	a = 1;
+	function fn(){
+		if(a == 1){
+			$('#message_tips').css({color:'white'});
+			a = 0;
+		}else{
+			$('#message_tips').css({color:'#F00'});
+			a = 1;
+		}
+	}
+	var myInterval;
+	
+	/**
+	 * ajax提醒
+	 **/
+	function message_tips(){
+		$.get("{:U('core/message/tips')}", function(data){
+			if(data.message != $('#message_tips').html()){
+				$('#message_tips').css({color:'#F00'});
+				myInterval = setInterval(fn,1000);
+				$("#message_audio").html("<audio id='ttsoundplayer'  autoplay='autoplay'><source src='__PUBLIC__/sound/Global.wav' type='audio/wav'></audio>");
+			} else {
+				$("#message_audio").html('');
+				if(data.message == 0){
+					$('#message_tips').css({color:'#000'});
+					clearInterval(myInterval);
+				}
+			}
+			$('#message_tips').html(data.message);
+		},'json');
+		setTimeout('message_tips()',5000);
+	}
+	message_tips();
+</script>

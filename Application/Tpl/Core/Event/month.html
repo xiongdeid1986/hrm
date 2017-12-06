@@ -1,0 +1,61 @@
+<include file="Public:header" />
+{:W('Navigation')}
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">日程</div>
+		<div class="row-table-body">
+			<p class="form-title"><a class="pull-right btn btn-primary btn-xs" href="{:U('core/event/add')}">添加日程</a><a href="{:U('core/event/index')}">全部日程</a>&nbsp;&nbsp;每月日程</p>
+			<div class="row-body">
+					<div id="date1" class="cdate">
+						<a id="preMonth" title="上一年"><img src="__PUBLIC__/img/calendar_n1.png"></a>
+						<a id="preYear" title="上一月"><img src="__PUBLIC__/img/calendar_n2.png"></a>
+						<span class="selectDate">
+							<span class="selectY"></span>年<span class="selectM"></span>月
+						</span>
+						<a id="nextYear" title="下一月"><img src="__PUBLIC__/img/calendar_p2.png"></a>
+						<a id="nextMonth" title="下一年"><img src="__PUBLIC__/img/calendar_p1.png"></a>
+					</div>
+					<table id="calTable2" class="calTable">
+						<thead>
+							<tr>
+								<th>日</th>
+								<th>一</th>
+								<th>二</th>
+								<th>三</th>
+								<th>四</th>
+								<th>五</th>
+								<th>六</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+							</tr>
+							<tr>
+								<td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+							</tr>
+							<tr>
+								<td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+							</tr>
+							<tr>
+								<td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+							</tr>
+							<tr>
+								<td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+							</tr>
+							<tr>
+								<td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<script type="text/javascript">
+					new Calendar("calTable2","date1",{:date('Y')},{:date('m')},'{:U("core/event/ajaxMonth")}');
+				</script>
+				<div class="clear"></div>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<include file="Public:alert" />
+<include file="Public:footer" />

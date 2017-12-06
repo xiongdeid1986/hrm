@@ -1,0 +1,51 @@
+<include file="Core:Public:header" />
+{:W('Navigation')}
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">绩效考核详情</div>
+		<div class="row-table-body form-horizontal">
+			<p class="form-title">
+				绩效考核详情&nbsp;&nbsp;
+				<a href="javascript:history.go(-1);">返回</a>&nbsp;&nbsp;
+			</p>
+			<div class="form-group">
+				<div class="col-sm-12" id="itembox">
+					<table class="table table-bordered">
+						<tr>
+							<td>考核对象</td>
+							<td>岗位</td>
+							<td>考核表</td>
+							<td>分数</td>
+							<td>操作</td>
+						</tr>
+						<volist name="appraisal['examinee_user']" id="vo">
+						<tr>
+							<td>{$vo.name}</td>
+							<td>{$vo.department_name} > {$vo.position_name}</td>
+							<td>{$appraisal.name}</td>
+							<td>{$vo.sum_point}</td>
+							<td><a href="javascript:void(0);" rel="{$appraisal['appraisal_manager_id']}" value="{$vo['user_id']}" class="detail_results">详细</a></td>
+						</tr>
+						</volist>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+	/**
+	 * 得分详细
+	 **/
+	$(".detail_results").click(function(){
+		var id = $(this).attr('rel');
+		var uid = $(this).attr('value');
+		$('#alert').modal({
+			show:true,
+			remote:"{:U('hrm/appraisalpoint/detailResults','id=')}"+id+'&uid='+uid
+		});
+	});
+</script>
+<include file="Core:Public:alert" />
+<include file="Core:Public:footer" />

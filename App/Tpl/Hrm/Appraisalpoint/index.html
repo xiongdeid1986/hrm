@@ -1,0 +1,50 @@
+<include file="Core:Public:header" />
+{:W('Navigation')}
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">在线评分</div>
+		<div class="row-table-body">
+			<p class="form-title">在线评分</p>
+			<if condition="empty($appraisalpoint)">
+				<div>---暂无数据---</div>
+			<else />
+			<form class="form-horizontal " id="form1"  method="post">
+				<table class="table" style="margin-bottom:0px;">
+					<tbody>
+						<tr>
+							<th>考核名称</th>
+							<th>类型</th>
+							<th>启用时间</th>
+							<th>截止时间</th>
+							<th>状态</th>
+							<th>待评分人数</th>
+							<th>操作</th>
+						</tr>
+						<volist name="appraisalpoint" id="vo">
+						<tr>
+							<td><a href="{:U('hrm/appraisalmanager/view','id='.$vo['appraisal_manager_id'])}" target="_blank">{$vo.name}</a></td>
+							<td>{$vo.template.category.name}</td>
+							<td>{$vo.start_time|date='Y-m-d',###}</td>
+							<td>{$vo.end_time|date='Y-m-d',###}</td>
+							<td>{$vo.status_name}</td>
+							<td>{$vo.not_appraisal_user_num}</td>
+							<td>
+								<a href="{:U('hrm/appraisalpoint/edit','id='.$vo['appraisal_manager_id'])}" target="_blank">评分</a>
+							</td>
+						</tr>
+						</volist>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td colspan="7" align="center">{$page}<div class="clear"></div></td>
+						</tr>
+					</tfoot>
+				</table>
+			</form>
+			</if>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<include file="Core:Public:alert" />
+<include file="Core:Public:footer" />

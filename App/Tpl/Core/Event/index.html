@@ -1,0 +1,105 @@
+<include file="Public:header" />
+{:W('Navigation')}
+<script src="__PUBLIC__/js/datepicker/WdatePicker.js"></script>
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">日程</div>
+		<div class="row-table-body">
+			<p class="form-title">
+				全部日程&nbsp;&nbsp;<a href="{:U('core/event/month')}">每月日程</a>
+				<a class="pull-right btn btn-primary btn-xs" href="{:U('core/event/add')}">添加日程</a>
+				<form id="search_form" action="" method="get">
+					<input type="hidden" name="g" value="core"/>
+					<input type="hidden" name="m" value="event"/>
+					<div class="form-inline" >
+						<div class="form-group">
+							<label for="search_user_name">主题</label>
+							<input type="text" class="form-control" id="search_title" name="search_title" />
+						</div>&nbsp;&nbsp;
+						<div class="form-group">
+							<label for="search_status">负责人</label>
+							<input type="hidden" id="dialog_user_id" name="user_id" />
+							<input type="text" class="form-control" id="dialog_user_name" name="user_name" />
+						</div>&nbsp;&nbsp;
+						<div class="form-group">
+							<input type="text" class="form-control" id="search_start_time" name="search_start_time" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" placeholder="开始日期"/>&nbsp;-&nbsp;
+							<input type="text" class="form-control" id="search_end_time" name="search_end_time" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" placeholder="结束日期"/>
+						</div>
+						<input type="button" class="btn search_btn"  value="搜索" />
+					</div>
+				</form>
+			</p>
+			<form action="{:U('core/event/delete')}" method="post">
+			<table class="table" style="margin-bottom:0px;">
+				<tbody>
+					<tr>
+						<th><input type="checkbox" id="check_all" /></th>
+						<th>主题</th>
+						<th>负责人</th>
+						<th>开始时间</th>
+						<th>结束时间</th>
+						<th>地址</th>
+						<th>操作</th>
+					</tr>
+					<volist name="eventlist" id="vo">
+					<tr>
+						<td><input type="checkbox" class="check_list" name="event_id[]" value="{$vo.event_id}" /></td>
+						<td><a href="{:U('core/event/view','id='.$vo['event_id'])}">{$vo.title}</a></td>
+						<td>{$vo.user_name}</td>
+						<td>{$vo.start_time|date='Y-m-d H:i:s',###}</td>
+						<td>{$vo.end_time|date='Y-m-d H:i:s',###}</td>
+						<td>{$vo.address}</td>
+						<td><a href="{:U('core/event/edit','id='.$vo['event_id'])}">编辑</a>&nbsp;|&nbsp;<a href="{:U('core/event/delete','id='.$vo['event_id'])}">删除</a></td>
+					</tr>
+					</volist>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td><input class="btn btn-primary btn-xs" type="submit" value="删除" /></td>
+						<td colspan="5">{$page}<div class="clear"></div></td>
+					</tr>
+				</tfoot>
+			</table>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+	$("#check_all").click(function(){
+		$("input[class='check_list']").prop('checked',$(this).prop('checked'));
+	});
+	
+	$('#dialog_user_name').click(function(){
+		$('#alert').modal({
+				show:true,
+				remote:'{:U("core/user/getsubuserdialog", "self=1")}'
+			});
+	});
+	
+	$('#search_title').prop('value', '{$Think.get.search_title}');
+	$('#dialog_user_name').prop('value', '{$Think.get.user_name}');
+	$('#search_start_time').prop('value', '{$Think.get.search_start_time}');
+	$('#search_end_time').prop('value', '{$Think.get.search_end_time}');
+	
+	/**
+	 * 单击提交搜索表单
+	 * 双击清空搜索项
+	 **/
+	$(function(){
+		var TimeFn = null;
+		$('.btn.search_btn').click(function () {
+			clearTimeout(TimeFn);
+			TimeFn = setTimeout(function(){
+				$('#search_form').submit();
+			},300);
+		});
+		
+		$('.btn.search_btn').dblclick(function () {
+			clearTimeout(TimeFn);
+			window.location.href="{:U('core/event/index')}";
+		})
+	});
+</script>
+<include file="Public:alert" />
+<include file="Public:footer" />

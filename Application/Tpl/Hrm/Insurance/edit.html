@@ -1,0 +1,99 @@
+<include file="Core:Public:header" />
+{:W('Navigation')}
+<script src="__PUBLIC__/js/datepicker/WdatePicker.js"></script>
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">社保投保</div>
+		<div class="row-table-body">
+			<p class="form-title">
+				<a class="pull-right btn btn-primary btn-xs" href="{:U('hrm/insurance/index')}">投保员工列表</a>编辑社保信息
+			</p>
+			<form class="form-horizontal " action="{:U('hrm/insurance/edit')}" method="post">
+				<input name="insurance_id" type="hidden" value="{$info.insurance_id}">
+				<div class="form-group">
+					<label for="to_name" class="col-sm-2 control-label">姓名</label>
+					<div class="col-sm-3">
+						<input class="form-control" type="text" id="to_name" value="{$info.name}">
+						<input type="hidden" name="user_id" id="to_user_id" value="{$info.user_id}" >
+					</div>
+					<label for="id_num" class="col-sm-2 control-label">身份证号</label>
+					<div class="col-sm-3">
+						<input class="form-control" type="text" name="id_num" id="id_num" value="{$info.id_num}" >
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="tbno" class="col-sm-2 control-label">社保号</label>
+					<div class="col-sm-3">
+						<input class="form-control" type="text" name="tbno" id="tbno" value="{$info.tbno}" >
+					</div>
+					<label for="tbtime" class="col-sm-2 control-label">参保日期</label>
+					<div class="col-sm-3">
+						<input class="form-control" type="text" name="tbtime" id="tbtime" value="{$info.tbtime|date='Y-m-d',###}" onclick="WdatePicker()" >
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="accounts_status" class="col-sm-2 control-label">户口性质</label>
+					<div class="col-sm-3">
+						<select id="accounts_status" class="form-control" id="accounts_status" name="accounts_status">
+							<option value="1" <if condition="$info['accounts_status'] == 1">selected="selected"</if>>非农</option>
+							<option value="2" <if condition="$info['accounts_status'] == 2">selected="selected"</if>>农业</option>
+						</select>
+					</div>
+					<label for="ygsf" class="col-sm-2 control-label">员工身份</label>
+					<div class="col-sm-3">
+						<select id="ygsf" class="form-control" name="ygsf" id="ygsf">
+							<option value="1" <if condition="$info['ygsf'] == 1">selected="selected"</if>>农民</option>
+							<option value="2" <if condition="$info['ygsf'] == 2">selected="selected"</if>>工人</option>
+							<option value="3" <if condition="$info['ygsf'] == 3">selected="selected"</if>>干部</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="insurance_address" class="col-sm-2 control-label">社保代付地</label>
+					<div class="col-sm-3">
+						<input class="form-control" type="text" name="insurance_address" id="insurance_address" value="{$info.insurance_address}" >
+					</div>
+					<label for="fund_address" class="col-sm-2 control-label">公积金代付地</label>
+					<div class="col-sm-3">
+						<input class="form-control" type="text" name="fund_address" id="fund_address" value="{$info.fund_address}" >
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="suit_id" class="col-sm-2 control-label">社保套帐</label>
+					<div class="col-sm-3">
+						<select id="ygsf" class="form-control" name="suit_id" id="suit_id">
+							<volist name="insurancesuit" id="vo">
+							<option value="{$vo.insurance_suit_id}" <if condition="$vo['insurance_suit_id'] == $info['suit_id']">selected="selected"</if>>{$vo.name}</option>
+							</volist>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="content" class="col-sm-2 control-label">备注</label>
+					<div class="col-sm-7">
+						<textarea class="form-control" rows="5" name="content" id="content" >{$info.content}</textarea>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label"></label>
+					<div class="col-sm-3">
+						<input name="submit" class="btn btn-primary" type="submit" value="保存"/>&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="btn" value="取消" onclick="javascript:history.go(-1);"/>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+$(function(){
+	$('#to_name').click(function(){
+		$('#alert').modal({
+			show:true,
+			remote:'{:U('core/user/getuserrindex')}'
+		});
+	});
+});
+</script>
+<include file="Core:Public:alert" />
+<include file="Core:Public:footer" />

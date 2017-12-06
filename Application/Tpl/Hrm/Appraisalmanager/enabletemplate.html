@@ -1,0 +1,119 @@
+<include file="Core:Public:header" />
+{:W('Navigation')}
+<script src="__PUBLIC__/js/datepicker/WdatePicker.js"></script>
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">启用模板</div>
+		<div class="row-table-body">
+			<form class="form-horizontal" action="{:U('hrm/appraisalmanager/enableTemplate')}" method="post">
+				<input type="hidden" name="id" value="{$template_id}" />
+				<p class="form-title">
+					启用模板&nbsp;&nbsp;<a href="javascript:history.go(-1);">返回</a>&nbsp;&nbsp;
+				</p>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">绩效考核名称</label>
+					<div class="col-sm-3">
+						<input class="form-control" type="text" name="name" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">模板</label>
+					<div class="col-sm-3">
+						<input type="hidden" name="appraisal_template_id" id="dialog_template_id" value=""/>
+						<input class="form-control" type="text" name="appraisal_template_name" id="dialog_template_name"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">负责人</label>
+					<div class="col-sm-3">
+						<input type="hidden" name="executor_id" id="dialog_user_id" value="{:session('user_id')}"/>
+						<input class="form-control" type="text" name="dialog_user_name" id="dialog_user_name" value="{:session('name')}"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">启用日期</label>
+					<div class="col-sm-3">
+						{$start_time|date='Y-m-d',###}
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">截止日期</label>
+					<div class="col-sm-3">
+						<input class="form-control" type="text" name="end_time" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">考核对象</label>
+					<div class="col-sm-3">
+						<input type="hidden" name="examinee_user_id" id="to_user_id" value=""/>
+						<input class="form-control" type="text" name="examinee_user_name" id="to_name" value=""/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">评分对象</label>
+					<div class="col-sm-3">
+						<input type="hidden" name="examiner_user_id" id="str_user_id" value=""/>
+						<input class="form-control" type="text" name="examiner_user_name" id="str_user_name" value=""/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label"></label>
+					<div class="col-sm-3">
+						<input name="submit" class="btn btn-primary" type="submit" value="确定"/>&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="button" class="btn" value="取消" onclick="javascript:history.go(-1);"/>
+					</div>
+				</div>
+			</form>	
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+	/**
+	 * 选择模板
+	 * 
+	 **/
+	$('#dialog_template_name').click(function(){
+		$('#alert').modal({
+			show:true,
+			remote:'{:U("hrm/appraisaltemplate/templateListDialog")}'
+		});
+	});
+	
+	/**
+	 * 负责人
+	 * 
+	 **/
+	$('#dialog_user_name').click(function(){
+		$('#alert').modal({
+			show:true,
+			remote:'{:U("core/user/getSubUserDialog", "self=1")}'
+		});
+	});
+	
+	/**
+	 * 选择评分人和考核对象
+	 * 
+	 **/
+	$("#to_name").click(function(){
+		$('#alert').modal({
+			show:true,
+			remote:'{:U("core/user/getuserindex")}'
+		});
+	});
+	$("#str_user_name").click(function(){
+		$('#alert').modal({
+			show:true,
+			remote:'{:U("hrm/appraisalmanager/getUserListDialog")}'
+		});
+	});
+	
+	/**
+	 * 全选
+	 **/
+	$("#check_all").click(function(){
+		$("input[class='check_list']").prop('checked',$(this).prop('checked'));
+	});
+</script>
+<include file="Core:Public:alert" />
+<include file="Core:Public:footer" />

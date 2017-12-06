@@ -1,0 +1,113 @@
+<include file="Core:Public:header" />
+{:W('Navigation')}
+<script src="__PUBLIC__/js/datepicker/WdatePicker.js"></script>
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">员工打卡</div>
+		<div class="row-table-body">
+			<p class="form-title">员工打卡
+				<a href="javascript:void(0);" id="import_punch" class="pull-right btn btn-primary btn-xs" style="margin-left:10px;">导入</a>
+				<a href="javascript:void(0);" id="export_punch" class="pull-right btn btn-primary btn-xs" >导出</a>
+			</p>
+			<form id="search_form" action="" method="get">
+				<input type="hidden" name="g" value="hrm"/>
+				<input type="hidden" name="m" value="punch"/>
+				<div class="form-inline" >
+					<div class="form-group">
+						<label for="search_user_name">员工姓名</label>
+						<input type="text" class="form-control" id="search_user_name" name="search_user_name" />
+					</div>&nbsp;&nbsp;
+					<div class="form-group">
+						<label for="search_type">类型</label>
+						<select class="form-control" id="search_type" name="search_type">
+							<option value="">全部</option>
+							<option value="0">上班</option>
+							<option value="1">下班</option>
+						</select>
+					</div>&nbsp;&nbsp;
+					<div class="form-group">
+						<input type="text" class="form-control" id="search_start_time" name="search_start_time" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" placeholder="开始日期"/>&nbsp;-&nbsp;
+						<input type="text" class="form-control" id="search_end_time" name="search_end_time" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" placeholder="结束日期"/>
+					</div>
+					<input type="button" class="btn search_btn" value="搜索" />
+				</div>
+			</form>
+			<if condition="empty($punchlist)">
+				<div>---暂无数据---</div>
+			<else />
+				<table class="table" style="margin-bottom:0px;">
+					<tbody>
+						<tr>
+							<th>姓名</th>
+							<th>类型</th>
+							<th>时间</th>
+							<th>星期</th>
+							<th>IP</th>
+						</tr>
+						<volist name="punchlist" id="vo">
+						<tr>
+							<td>{$vo.user_name}</td>
+							<td><if condition="'0' eq $vo['type']"><span style="color:#F8971C">{$vo.type_name}<else /><span style="color:#0EB930">{$vo.type_name}</if></td>
+							<td>{$vo.create_time|date='Y-m-d H:i',###}</td>
+							<td>{$vo.week}</td>
+							<td>{$vo.from_ip}</td>
+						</tr>
+						</volist>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td colspan="4" align="center">{$page}<div class="clear"></div></td>
+						</tr>
+					</tfoot>
+				</table>
+			</if>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+	/**
+	 * 导出打卡
+	 **/
+	$('#export_punch').click(function(){
+		if(confirm('确定要导出打卡记录吗？')){
+			location.href="{:U('hrm/punch/exportPunch')}";
+		}
+	});
+	
+	/**
+	 * 导入打卡
+	 **/
+	$('#import_punch').click(function(){
+		$('#alert').modal({
+			show:true,
+			remote:'{:U("hrm/punch/importPunchDialog")}'
+		});
+	});
+	
+	$('#search_user_name').prop('value', '{$Think.get.search_user_name}');
+	$("#search_type option[value='{$Think.get.search_type}']").prop('selected', true);
+	$('#search_start_time').prop('value', '{$Think.get.search_start_time}');
+	$('#search_end_time').prop('value', '{$Think.get.search_end_time}');
+	
+	/**
+	 * 单击提交搜索表单
+	 * 双击清空搜索项
+	 **/
+	$(function(){
+		var TimeFn = null;
+		$('.btn.search_btn').click(function () {
+			clearTimeout(TimeFn);
+			TimeFn = setTimeout(function(){
+				$('#search_form').submit();
+			},300);
+		});
+		
+		$('.btn.search_btn').dblclick(function () {
+			clearTimeout(TimeFn);
+			window.location.href="{:U('hrm/punch/index')}";
+		})
+	});
+</script>
+<include file="Core:Public:alert" />
+<include file="Core:Public:footer" />

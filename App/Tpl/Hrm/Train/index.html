@@ -1,0 +1,62 @@
+<include file="Core:Public:header" />
+{:W('Navigation')}
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">培训计划</div>
+		<div class="row-table-body">
+			<p class="form-title"><a class="pull-right btn btn-primary btn-xs" href='{:U("hrm/train/add")}'>新建计划</a>计划列表</p>
+			<table class="table" style="margin-bottom:0px;">
+				<form action="{:U('hrm/train/delete')}" method="post">
+				<tbody>
+					<tr>
+						<th><input type="checkbox" id="check_all"/></th>
+						<th>项目名称</th>
+						<th>培训类型</th>
+						<th>主办单位</th>
+						<th>负责人</th>
+						<th>培训地点</th>
+						<th>培训机构</th>
+						<th>计划开始时间</th>
+						<th>培训天数</th>
+						<th>费用预算</th>
+						<th>是否已转</th>
+						<th>操作</th>
+					</tr>
+					<volist name="trainlist" id="vo">
+					<tr>
+						<td><input type="checkbox" name="train_id[]" value="{$vo.train_id}" class="check_list"></td>
+						<td><a href="{:U('hrm/train/view','id='.$vo['train_id'])}">{$vo.name}</a></td>
+						<td><if condition ="$vo.train_type == 1">职业技能<elseif condition ="$vo.train_type == 2"/>职业素养<elseif condition ="$vo.train_type == 3"/>业务知识<elseif condition ="$vo.train_type == 4"/>岗位技能</if></td>
+						<td>{$vo.organizers}</td>
+						<td>{$vo.username}</td>
+						<td>{$vo.address}</td>
+						<td>{$vo.org}</td>
+						<td>{$vo.start_time|date='Y-m-d H:i:s',###}</td>
+						<td>{$vo.day}</td>
+						<td>{$vo.money}</td>
+						<td><if condition="$vo['change'] == 1">已转<else />未转</if></td>
+						<td><a href="{:U('hrm/train/edit','id='.$vo['train_id'])}">编辑</a>&nbsp;|&nbsp;<a href="{:U('hrm/train/delete','id='.$vo['train_id'])}">删除</a></td>
+					</tr>
+					</volist>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td><input type="submit" value="删除" class="btn btn-primary btn-xs"></td>
+						<td colspan="11">{$page}<div class="clear"></div></td>
+					</tr>
+				</tfoot>
+				</form>
+			</table>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+$(function(){
+	$("#check_all").click(function(){
+		$("input[class='check_list']").prop('checked',$(this).prop('checked'));
+	});
+}); 
+</script>
+<include file="Core:Public:alert" />
+<include file="Core:Public:footer" />

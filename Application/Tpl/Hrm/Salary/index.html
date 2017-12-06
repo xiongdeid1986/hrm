@@ -1,0 +1,111 @@
+<include file="Core:Public:header" />
+{:W('Navigation')}
+<script src="__PUBLIC__/js/datepicker/WdatePicker.js"></script>
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">薪资发放</div>
+		<div class="row-table-body">
+			<p class="form-title">
+				已发薪资<a class="pull-right btn btn-primary btn-xs" href="{:U('hrm/salary/add')}">发放薪资</a>
+				<form id="search_form" action="" method="get">
+					<input type="hidden" name="g" value="hrm"/>
+					<input type="hidden" name="m" value="salary"/>
+					<div class="form-inline" >
+						<div class="form-group">
+							<label for="search_user_name">员工姓名</label>
+							<input type="text" class="form-control" id="search_user_name" name="search_user_name" />
+						</div>&nbsp;&nbsp;
+						<div class="form-group">
+							<input type="text" class="form-control" id="search_start_time" name="search_start_time" onclick="WdatePicker({dateFmt:'yyyyMM'})" placeholder="开始日期"/>&nbsp;-&nbsp;
+							<input type="text" class="form-control" id="search_end_time" name="search_end_time" onclick="WdatePicker({dateFmt:'yyyyMM'})" placeholder="结束日期"/>
+						</div>
+						<input type="button" class="btn search_btn"  value="搜索" />
+					</div>
+				</form>
+			</p>
+			<table class="table" style="margin-bottom:0px;">
+				<form action="{:U('hrm/salary/delete')}" method="post">
+				<tbody>
+					<tr>
+						<th><input type="checkbox" id="check_all"></th>
+						<th>员工姓名</th>
+						<th>薪资月份</th>
+						<th>套帐名称</th>
+						<th>实发工资</th>
+						<th>操作</th>
+					</tr>
+					<volist name="list" id="vo">
+					<tr>
+						<td><input type="checkbox" class="check_list" name="salary_id[]" value="{$vo.salary_id}"></td>
+						<td>{$vo.username}</td>
+						<td>{$vo.month}</td>
+						<td>{$vo.suit_name}</td>
+						<td>
+							<a href="javascript:void(0);" class="show_tips" data-content="
+							<foreach name="vo['item_detail']['suit']['items']" item="v" key="k">
+								<php>$content = $v['item'].'content';</php>
+								{$v['name']}:{$vo['item_detail']['items'][$v['item']]|default=0}元, {$vo['item_detail']['items'][$content]}<br />
+							</foreach>
+							">{$vo.money}元</a>
+						</td>
+						<td>
+							<a href="{:U('hrm/salary/view','id='.$vo['salary_id'])}">明细</a>&nbsp;|&nbsp;
+							<a href="{:U('hrm/salary/edit','id='.$vo['salary_id'])}">编辑</a>&nbsp;|&nbsp;
+							<a href="{:U('hrm/salary/delete','id='.$vo['salary_id'])}">删除</a>
+						</td>
+					</tr>
+					</volist>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td><input type="submit" value="删除" class="btn btn-primary btn-xs"></td>
+						<td colspan="5">{$page}<div class="clear"></div></td>
+					</tr>
+				</tfoot>
+				</form>
+			</table>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+	/**
+	 * 单击提交搜索表单
+	 * 双击清空搜索项
+	 **/
+	$(function(){
+		var TimeFn = null;
+		$('.btn.search_btn').click(function () {
+			clearTimeout(TimeFn);
+			TimeFn = setTimeout(function(){
+				$('#search_form').submit();
+			},300);
+		});
+		
+		$('.btn.search_btn').dblclick(function () {
+			clearTimeout(TimeFn);
+			window.location.href="{:U('hrm/salary/index')}";
+		});
+		$("#check_all").click(function(){
+			$("input[class='check_list']").prop('checked',$(this).prop('checked'));
+		});
+	});
+	
+	/**
+	 * 填充搜索项
+	 **/
+	$('#search_user_name').prop('value', '{$Think.get.search_user_name}');
+	$('#search_start_time').prop('value', '{$Think.get.search_start_time}');
+	$('#search_end_time').prop('value', '{$Think.get.search_end_time}');
+	
+	/**
+	 * 工资详细
+	 * 
+	 **/
+	$('.show_tips').popover({
+		html:true,
+		trigger:'hover'
+	});
+</script>
+<include file="Core:Public:alert" />
+<include file="Core:Public:footer" />

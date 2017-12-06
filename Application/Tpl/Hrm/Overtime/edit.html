@@ -1,0 +1,91 @@
+<include file="Core:Public:header" />
+{:W('Navigation')}
+<script src="__PUBLIC__/js/datepicker/WdatePicker.js"></script>
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">编辑加班</div>
+		<div class="row-table-body">
+			<form class="form-horizontal " action="{:U('hrm/overtime/edit')}" method="post">
+				<input type="hidden" name="id" value="{$overtime.overtime_id}"/>
+				<p class="form-title">
+					编辑加班&nbsp;&nbsp;
+					<a href="javascript:history.go(-1);">返回</a>&nbsp;&nbsp;
+					<a href="{:U('hrm/overtime/index')}">返回上级</a>&nbsp;&nbsp;
+					<a href="javascript:void(0);" id="overtime_pass" class="pull-right btn btn-primary btn-xs" >已通过</a>
+					<a href="javascript:void(0);" id="overtime_fail" class="pull-right btn btn-primary btn-xs" >未通过</a>
+				</p>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">加班人</label>
+					<div class="col-sm-3">
+						<input type="hidden" name="user_id" id="dialog_user_id" value="{$overtime.user_id}" />
+						<input class="form-control" type="text" name="user_name" id="dialog_user_name" value="{$overtime.user_name}"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">类型</label>
+					<div class="col-sm-3">
+						<select class="form-control" name="overtime_category_id">
+							<volist name="category" id="vo">
+								<option value="{$vo.overtime_category_id}" <if condition="$vo['overtime_category_id'] eq $overtime['category']['overtime_category_id']">selected="selected"</if>>{$vo.name}</option>
+							</volist>
+						</select>
+					</div>
+					<label for="name" class="col-sm-2 control-label">结算方式</label>
+					<div class="col-sm-3">
+						<input type="radio" name="type" value="0" <if condition="'0' eq $overtime['type']">checked="checked"></if>&nbsp;计费加班&nbsp;&nbsp;
+						<input type="radio" name="type" value="1" <if condition="'1' eq $overtime['type']">checked="checked"</if>>&nbsp;调休&nbsp;&nbsp;
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">开始时间</label>
+					<div class="col-sm-3">
+						<input class="form-control" type="text" name="start_time" id="d4311" onFocus="WdatePicker({maxDate:$('#d4312').val(),minDate:'%y-%M-%d %H:%m:%s', dateFmt:'yyyy-MM-dd HH:mm:ss'})" value="{$overtime.start_time|date='Y-m-d H:i:s',###}"/>
+					</div>
+					<label for="name" class="col-sm-2 control-label">结束时间</label>
+					<div class="col-sm-3">
+						<input class="form-control" type="text" name="end_time" id="d4312" onFocus="WdatePicker({minDate:$('#d4311').val(),maxDate:'2020-10-01',dateFmt:'yyyy-MM-dd HH:mm:ss'})" value="{$overtime.end_time|date='Y-m-d H:i:s',###}"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">计算结果</label>
+					<div class="col-sm-3">
+						共<span>{$overtime.overtime_days}</span>天<span>{$overtime.overtime_hours}</span>小时
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">填写人</label>
+					<div class="col-sm-3">
+						{$overtime.maker_user_name}
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">加班原因</label>
+					<div class="col-sm-8">
+						<textarea name="content" class="col-sm-8 form-control" style="min-height:150px;">{$overtime.content}</textarea>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label"></label>
+					<div class="col-sm-3">
+						<input name="submit" class="btn btn-primary" type="submit" value="保存"/>&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="button" class="btn" value="取消" onclick="javascript:history.go(-1);"/>
+					</div>
+				</div>
+			</form>	
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script>
+	/**
+	 * 选择员工
+	 **/
+	$('#dialog_user_name').click(function(){
+		$('#alert').modal({
+			show:true,
+			remote:'{:U("core/user/getSubUserDialog","self=1")}'
+		});
+	});
+</script>
+<include file="Core:Public:alert" />
+<include file="Core:Public:footer" />

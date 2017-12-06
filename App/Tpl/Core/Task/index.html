@@ -1,0 +1,136 @@
+<include file="Public:header" />
+{:W('Navigation')}
+<script src="__PUBLIC__/js/datepicker/WdatePicker.js"></script>
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">任务列表</div>
+		<div class="row-table-body">
+			<p class="form-title">
+				全部任务<a class="pull-right btn btn-primary btn-xs" href="{:U('core/task/add')}">添加任务</a>
+				<form id="search_form" action="" method="get">
+					<input type="hidden" name="g" value="core"/>
+					<input type="hidden" name="m" value="task"/>
+					<div class="form-inline" >
+						<div class="form-group">
+							<label for="name">任务名称</label>
+							<input type="text" class="form-control" id="search_name" name="search_name" />
+						</div>&nbsp;&nbsp;
+						<div class="form-group">
+							<label for="level">等级</label>
+							<select class="form-control" id="search_level" name="search_level">
+								<option value="">全部</option>
+								<option value="1">普通</option>
+								<option value="2">紧急</option>
+								<option value="3">闲时处理</option>
+							</select>
+						</div>&nbsp;&nbsp;
+						<div class="form-group">
+							<label for="status">状态</label>
+							<select class="form-control" id="search_status" name="search_status">
+								<option value="">全部</option>
+								<option value="未开始">未开始</option>
+								<option value="进行中">进行中</option>
+								<option value="已处理">已处理</option>
+								<option value="退还">退还</option>
+							</select>
+						</div>&nbsp;&nbsp;
+						<div class="form-group">
+							<input type="text" class="form-control" id="search_start_time" name="search_start_time" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" placeholder="开始日期"/>&nbsp;-&nbsp;
+							<input type="text" class="form-control" id="search_end_time" name="search_end_time" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" placeholder="截止日期"/>
+						</div>
+						<input type="button" class="btn search_btn" value="搜索" />
+					</div>
+				</form>
+			</p>
+			<if condition="empty($tasklist)">
+				<div>---暂无数据---</div>
+			<else />
+			<form name="form1" id="form1" action="" method="post">
+				<table class="table" style="margin-bottom:0px;">
+					<tbody>
+						<tr>
+							<th><input type="checkbox" name="task_id[]" id="check_all"/></th>
+							<th>任务主题</th>
+							<th>主要执行人</th>
+							<th>状态</th>
+							<th>等级</th>
+							<th>开始日期</th>
+							<th>截止日期</th>
+							<th>操作</th>
+						</tr>
+						<volist name="tasklist" id="vo">
+						<tr>
+							<td><input type="checkbox" name="id[]" class="check_list" value="{$vo.task_id}" /></td>
+							<td><a href="{:U('core/task/view','id='.$vo['task_id'])}">{$vo.name}</td>
+							<td>{$vo.executor_name}</td>
+							<td>{$vo.status}</td>
+							<td><if condition="$vo['level'] eq 1">普通<elseif condition="$vo['level'] eq 2"/>紧急<else />闲时处理</if></td>
+							<td>{$vo.start_time|date='Y-m-d H:i',###}</td>
+							<td>{$vo.end_time|date='Y-m-d H:i',###}</td>
+							<td>
+								<a href="{:U('core/task/edit','id='.$vo['task_id'])}">编辑</a>&nbsp;|&nbsp;
+								<a href="{:U('core/task/delete','id='.$vo['task_id'])}">删除</a>
+							</td>
+						</tr>
+						</volist>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td>
+								<input name="submit" class="btn btn-primary btn-xs" type="submit" id="delete" value="删除"/>
+							</td>
+							<td colspan="7" align="center">{$page}<div class="clear"></div></td>
+						</tr>
+					</tfoot>
+				</table>
+			</form>	
+			</if>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+	/**
+	 * 全选
+	 **/
+	$("#check_all").click(function(){
+		$("input[class='check_list']").prop('checked',$(this).prop('checked'));
+	});
+	
+	/**
+	 * 批量删除
+	 **/
+	$("#delete").click(function(){
+		if(confirm('确定要删除吗？')){
+			$("#form1").attr("action","{:U('core/task/delete')}");
+			$("#form1").submit();
+		}
+	});
+	
+	$("#search_name").prop('value', '{$Think.get.search_name}');
+	$("#search_level option[value='{$Think.get.search_level}']").prop("selected", true);
+	$("#search_status option[value='{$Think.get.search_status}']").prop("selected", true);
+	$("#search_start_time").prop('value', '{$Think.get.search_start_time}');
+	$("#search_end_time").prop('value', '{$Think.get.search_end_time}');
+	
+	/**
+	 * 单击提交搜索表单
+	 * 双击清空搜索项
+	 **/
+	$(function(){
+		var TimeFn = null;
+		$('.btn.search_btn').click(function () {
+			clearTimeout(TimeFn);
+			TimeFn = setTimeout(function(){
+				$('#search_form').submit();
+			},300);
+		});
+		
+		$('.btn.search_btn').dblclick(function () {
+			clearTimeout(TimeFn);
+			window.location.href="{:U('core/task/index')}";
+		})
+	});
+</script>
+<include file="Public:alert" />
+<include file="Public:footer" />

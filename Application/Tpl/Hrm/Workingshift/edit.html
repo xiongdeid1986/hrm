@@ -1,0 +1,86 @@
+<include file="Core:Public:header" />
+{:W('Navigation')}
+<script src="__PUBLIC__/js/datepicker/WdatePicker.js"></script>
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">编辑班次</div>
+		<div class="row-table-body">
+			<form class="form-horizontal " action="{:U('hrm/workingshift/edit')}" method="post">
+				<input type="hidden" name="id" value="{$shift.working_shift_id}"/>
+				<p class="form-title">编辑班次&nbsp;&nbsp;<a href="javascript:history.go(-1);">返回</a></p>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">班次名称</label>
+					<div class="col-sm-3">
+						<input class="form-control" type="text" name="name" value="{$shift.name}"/>
+					</div>
+					<label for="name" class="col-sm-2 control-label">类型</label>
+					<div class="col-sm-3">
+						<select class="form-control" name="type">
+							<option value="0" <if condition="'0' eq $shift['type']">selected="selected"</if>>标准工作制</option>
+							<option value="1" <if condition="'1' eq $shift['type']">selected="selected"</if>>周期工作制</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">开始时间</label>
+					<div class="col-sm-3">
+						<input class="form-control" type="text" name="start_time" onclick="WdatePicker({dateFmt:'HH:mm'})" value="{$shift.start_time|date='H:i',###}"/>
+					</div>
+					<label for="name" class="col-sm-2 control-label">结束时间</label>
+					<div class="col-sm-3">
+						<input class="form-control" type="text" name="end_time" onclick="WdatePicker({dateFmt:'HH:mm'})" value="{$shift.end_time|date='H:i',###}"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">工作日</label>
+					<div class="col-sm-8">
+						<input type="checkbox" name="working_days[]" value="1" <if condition="in_array('1', $shift['working_daysArr'])">checked="checked"</if>/>&nbsp;周一&nbsp;&nbsp;
+						<input type="checkbox" name="working_days[]" value="2" <if condition="in_array('2', $shift['working_daysArr'])">checked="checked"</if>/>&nbsp;周二&nbsp;&nbsp;
+						<input type="checkbox" name="working_days[]" value="3" <if condition="in_array('3', $shift['working_daysArr'])">checked="checked"</if>/>&nbsp;周三&nbsp;&nbsp;
+						<input type="checkbox" name="working_days[]" value="4" <if condition="in_array('4', $shift['working_daysArr'])">checked="checked"</if>/>&nbsp;周四&nbsp;&nbsp;
+						<input type="checkbox" name="working_days[]" value="5" <if condition="in_array('5', $shift['working_daysArr'])">checked="checked"</if>/>&nbsp;周五&nbsp;&nbsp;
+						<input type="checkbox" name="working_days[]" value="6" <if condition="in_array('6', $shift['working_daysArr'])">checked="checked"</if>/>&nbsp;周六&nbsp;&nbsp;
+						<input type="checkbox" name="working_days[]" value="7" <if condition="in_array('7', $shift['working_daysArr'])">checked="checked"</if>/>&nbsp;周日
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">描述</label>
+					<div class="col-sm-5">
+						<textarea name="description" class="form-control" style="min-height:100px;">{$shift.description}</textarea>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label"></label>
+					<div class="col-sm-3">
+						<input name="submit" class="btn btn-primary" type="submit" value="保存"/>&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="button" class="btn" value="取消" onclick="javascript:history.go(-1);"/>
+					</div>
+				</div>
+			</form>	
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script>
+	/**
+	 * 添加默认显示的操作
+	 **/
+	$('.defaultDispalyDialog').click(function(){
+		$('#alert').modal({
+			show:true,
+			remote:'{:U("core/navigation/defaultDispalyDialog")}'
+		});
+	});
+	
+	/**
+	 * 为导航添加功能
+	 **/
+	$('.controlDialog').click(function(){
+		$('#alert').modal({
+			show:true,
+			remote:'{:U("core/navigation/controlDialog")}'
+		});
+	});
+</script>
+<include file="Core:Public:alert" />
+<include file="Core:Public:footer" />

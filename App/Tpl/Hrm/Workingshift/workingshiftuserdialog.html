@@ -1,0 +1,32 @@
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h4 class="modal-title" id="myModalLabel"><b>班次员工列表</b></h4>
+		</div>
+		<div class="modal-body form-horizontal">
+			<input type="hidden" name="working_shift_id" value="{$working_shift_id}"/>
+			<table class="table table-striped">
+				<thead>
+					<th>姓名</th>
+					<th>班次</th>
+					<th>岗位</th>
+					<th>类型</th>
+				</thead>
+				<tbody>
+					<volist name="working_shift_user" id="vo"  >
+					<tr>
+						<td>{$vo.name}</td>
+						<td>{$vo.working_shift_name}</td>
+						<td>{$vo.position_name}</td>
+						<td>{$vo.type_name}</td>
+					</tr>
+					</volist>
+				</tbody>
+			</table>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+			</div>
+		</div>
+	</div>
+</div>

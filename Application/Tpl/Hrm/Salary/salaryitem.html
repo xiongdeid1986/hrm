@@ -1,0 +1,51 @@
+<include file="Core:Public:header" />
+{:W('Navigation')}
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">薪资项目</div>
+		<div class="row-table-body">
+			<p class="form-title">
+				<a class="pull-right btn btn-primary btn-xs" href="{:U('hrm/salary/addsalaryitem')}">添加</a>薪资项目列表
+			</p>
+			<table class="table" style="margin-bottom:0px;">
+				<form action="{:U('hrm/salary/deletesalaryitem')}" method="post">
+				<tbody>
+					<tr>
+						<th><input type="checkbox" id="check_all"/></th>
+						<th>项目名称</th>
+						<th>说明</th>
+						<th>操作</th>
+					</tr>
+					<volist name="list" id="vo">
+					<tr>
+						<td><input type="checkbox" name="salary_item_id[]" value="{$vo.salary_item_id}" class="check_list"></td>
+						<td>{$vo.name}</td>
+						<td>{$vo.content}</td>
+						<td>
+							<a href="{:U('hrm/salary/editsalaryitem','id='.$vo['salary_item_id'])}">编辑</a>&nbsp;|&nbsp;
+							<a href="{:U('hrm/salary/deletesalaryitem','id='.$vo['salary_item_id'])}">删除</a>
+						</td>
+					</tr>
+					</volist>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td><input type="submit" value="删除" class="btn btn-primary btn-xs"></td>
+						<td colspan="3">{$page}<div class="clear"></div></td>
+					</tr>
+				</tfoot>
+				</form>
+			</table>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+$(function(){
+	$("#check_all").click(function(){
+		$("input[class='check_list']").prop('checked',$(this).prop('checked'));
+	});
+}); 
+</script>
+<include file="Core:Public:alert" />
+<include file="Core:Public:footer" />

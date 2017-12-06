@@ -1,0 +1,45 @@
+<include file="Public:header" />
+{:W('Navigation')}
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">日志详情</div>
+		<div class="row-table-body">
+			<form class="form-horizontal " action="{:U('core/log/add')}" method="post">
+				<p class="form-title">
+					日志详情&nbsp;&nbsp;<a href="{:U('core/log/add')}">添加日志</a>&nbsp;&nbsp;<a href="javascript:history.go(-1);">返回</a>
+					<a href="{:U('core/log/edit','id='.$log['log_id'])}" class="pull-right btn btn-primary btn-xs">编辑</a>
+				</p>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">日志标题</label>
+					<div class="col-sm-3">{$log.title}</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">作者</label>
+					<div class="col-sm-3">{$log.creator_user_name}</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">日志类型</label>
+					<div class="col-sm-3">{$log.log_category_name}</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">创建时间</label>
+					<div class="col-sm-3">{$log.create_time|date='Y-m-d H:i:s',###}</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">修改时间</label>
+					<div class="col-sm-3">
+						<if condition="!empty($log['update_time'])">{$log.update_time|date='Y-m-d H:i:s',###}<else />无</if>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">日志内容</label>
+					<div class="col-sm-8">
+						<pre style="min-height:150px;">{$log.content}</pre>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<include file="Public:alert" />
+<include file="Public:footer" />

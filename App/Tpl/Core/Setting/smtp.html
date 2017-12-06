@@ -1,0 +1,138 @@
+<include file="Public:header" />
+{:W('Navigation')}
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">smtp设置</div>
+		<div class="row-table-body">
+			<form class="form-horizontal" action="{:U('core/setting/smtp')}" method="post">
+				<p class="form-title">smtp基本配置信息&nbsp;&nbsp;(若不设置则无法使用密码找回功能)</p>
+				<div class="form-group">
+					<label for="address" class="col-sm-2 control-label">邮箱地址<span style="color:red;">*</span></label>
+					<div class="col-sm-3">
+						<input class="form-control" name="address" id="address" type="text" value="{$smtp['MAIL_ADDRESS']}"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="smtp" class="col-sm-2 control-label">smtp服务器地址<span style="color:red;">*</span></label>
+					<div class="col-sm-3">
+						<input class="form-control" name="smtp" id="smtp" type="text" value="{$smtp['MAIL_SMTP']}"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="loginName" class="col-sm-2 control-label">登录名<span style="color:red;">*</span></label>
+					<div class="col-sm-3">
+						<input class="form-control" name="loginName" id="loginName" type="text" value="{$smtp['MAIL_LOGINNAME']}"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="password" class="col-sm-2 control-label">密码<span style="color:red;">*</span></label>
+					<div class="col-sm-3">
+						<input class="form-control" name="password" id="password" type="password" value="{$smtp['MAIL_PASSWORD']}"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="test_email" class="col-sm-2 control-label">测试邮箱</label>
+					<div class="col-sm-3">
+						<input class="form-control" name="test_email" id="test_email" type="text"/>
+					</div>
+					<div class="col-sm-1">
+						<input class="btn btn-mini" id="test" name="submit" type="button" value="测试">
+					</div>
+				</div>
+				<p class="form-title">短信配置信息</p>
+				<div class="form-group">
+					<label for="uid" class="col-sm-2 control-label">短信接口用户名<span style="color:red;">*</span></label>
+					<div class="col-sm-3">
+						<input class="form-control" name="uid" id="uid" type="text" value="{$sms['uid']}"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="passwd" class="col-sm-2 control-label">短信接口密码<span style="color:red;">*</span></label>
+					<div class="col-sm-3">
+						<input class="form-control" name="passwd" id="passwd" type="password" value="{$sms['passwd']}"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="sign_name" class="col-sm-2 control-label">客户短信签名<span style="color:red;">*</span></label>
+					<div class="col-sm-3">
+						<input class="form-control" name="sign_name" id="sign_name" type="text" value="{$sms['sign_name']}"/>
+					</div>
+					<div class="col-sm-2">
+						不超过8个字符
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="sign_sysname" class="col-sm-2 control-label">内部通知短信签名<span style="color:red;">*</span></label>
+					<div class="col-sm-3">
+						<input class="form-control" name="sign_sysname" id="sign_sysname" type="text" value="{$sms['sign_sysname']}"/>
+					</div>
+					<div class="col-sm-2">
+						不超过8个字符
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="test_sms_phone" class="col-sm-2 control-label">测试手机</label>
+					<div class="col-sm-3">
+						<input class="form-control" name="test_sms_phone" id="test_sms_phone" type="text" />
+					</div>
+					<div class="col-sm-1">
+						<input class="btn btn-mini" id="test_sms_btn" type="button" value="发送测试短信"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="test_sms_phone" class="col-sm-2 control-label"></label>
+					<div class="col-sm-3">
+						<input name="submit" class="btn btn-primary" type="submit" value="保存"/>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<include file="Public:alert" />
+<script type="text/javascript">	
+	$('#test').click(
+		function(){
+			address = $('#address').val();
+			smtp = $('#smtp').val();
+			name = $('#loginName').val();
+			pw = $('#password').val();
+			email = $('#test_email').val();
+			if(address !='' & smtp !='' & name!='' & pw!='' & email!=''){
+				$.post('{:U("setting/smtp")}',
+				{   address:address,
+					smtp:smtp,
+					loginName:name,
+					password:pw,
+					test_email:email},
+				function(data){
+					alert(data.info);
+				},
+				'json');
+			} else {
+				alert('请填写完整信息!');
+			}
+		}
+	);
+	$('#test_sms_btn').click(
+		function(){
+			uid = $('#uid').val();
+			passwd = $('#passwd').val();
+			phone = $('#test_sms_phone').val();
+			if(uid !='' & passwd !='' & phone !=''){
+				$.post('{:U("setting/smtp")}',
+				{   uid:uid,
+					passwd:passwd,
+					phone:phone},
+				function(data){
+					alert(data.info);
+				},
+				'json');
+			} else {
+				alert('请填写完整信息!');
+			}
+		}
+	);
+</script>
+<include file="Public:footer" />	

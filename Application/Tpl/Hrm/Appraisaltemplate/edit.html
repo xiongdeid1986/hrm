@@ -1,0 +1,116 @@
+<include file="Core:Public:header" />
+{:W('Navigation')}
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">编辑绩效考核模板</div>
+		<div class="row-table-body">
+			<form class="form-horizontal" action="{:U('hrm/appraisaltemplate/edit')}" method="post">
+				<input type="hidden" name="id" value="{$appraisal_template.appraisal_template_id}"/>
+				<p class="form-title">
+					编辑绩效考核模板&nbsp;&nbsp;
+					<a href="javascript:history.go(-1);">返回</a>&nbsp;&nbsp;
+					<a href="{:U('hrm/appraisaltemplate/index')}">返回上级</a>&nbsp;&nbsp;
+				</p>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">模板名称</label>
+					<div class="col-sm-3">
+						<input class="form-control" type="text" name="name" value="{$appraisal_template.name}"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">类型</label>
+					<div class="col-sm-3">
+						<select class="form-control" name="category_id">
+							<volist name="template_category" id="vo">
+								<option value="{$vo.category_id}" <if condition="$vo['category_id'] eq $appraisal_template['category_id']">selected="selected"</if>>{$vo.name}</option>
+							</volist>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">创建人</label>
+					<div class="col-sm-3">
+						{$appraisal_template.creator_user_name}
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">更多说明</label>
+					<div class="col-sm-8">
+						<textarea name="description" class="form-control" style="min-height:150px;">{$appraisal_template.description}</textarea>
+					</div>
+				</div>
+				<p class="form-title">
+					考核内容
+				</p>
+				<div class="form-group">
+					<label for="insurance_type" class="col-sm-2 control-label">考核详细</label>
+					<div class="col-sm-9" id="itembox">
+						<table class="table table-bordered">
+							<tr>
+							<td>名称</td>
+							<td>标准分</td>
+							<td>评分范围</td>
+							<td>评分细则</td>
+							<td width="1%"><input type="button" id="additem" class="btn btn-primary btn-xs" value="+" /></td>
+							</tr>
+							<volist name="appraisal_template['score']" id="vo">
+							<tr>
+								<td><a href="javascript:void(0);" title="编辑" class="edititem" rel="{$vo.score_id}">{$vo.name}</a></td>
+								<td>{$vo.standard_score}</td>
+								<td>{$vo.low_scope}&nbsp;至&nbsp;{$vo.high_scope}</td>
+								<td>{$vo.description}</td>
+								<td><input type="button" class="btn btn-primary btn-xs deleteitem" rel="{$vo.score_id}" value="-"></td>
+							</tr>
+							</volist>
+						</table>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label"></label>
+					<div class="col-sm-3">
+						<input name="submit" class="btn btn-primary" type="submit" value="保存"/>&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="button" class="btn" value="取消" onclick="javascript:history.go(-1);"/>
+					</div>
+				</div>
+			</form>	
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+	/**
+	 * 添加考核内容
+	 * 
+	 **/
+	$('#additem').click(function(){
+		$('#alert').modal({
+			show:true,
+			remote:'{:U("hrm/appraisaltemplate/addScoreDialog","appraisal_template_id=")}'+{$appraisal_template.appraisal_template_id}
+		});
+	});
+	
+	/**
+	 * 编辑考核内容
+	 * 
+	 **/
+	$('.edititem').click(function(){
+		var score_id = $(this).attr('rel');
+		$('#alert').modal({
+			show:true,
+			remote:'{:U("hrm/appraisaltemplate/editScoreDialog","score_id=")}'+score_id
+		});
+	});
+	
+	/**
+	 * 删除考核内容
+	 * 
+	 **/
+	 $('.btn.btn-primary.btn-xs.deleteitem').click(function(){
+		var score_id = $(this).attr('rel');
+		if(confirm('确定要删除么？')){
+			location.href = '{:U("hrm/appraisaltemplate/deleteScore","score_id=")}'+score_id;
+		}
+	});
+</script>
+<include file="Core:Public:alert" />
+<include file="Core:Public:footer" />

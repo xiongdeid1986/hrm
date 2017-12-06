@@ -1,0 +1,51 @@
+<include file="Public:header" />
+{:W('Navigation')}
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">合同类型</div>
+		<div class="row-table-body">
+			<form class="form-horizontal " enctype="multipart/form-data" action="{:U('core/setting/contractType')}" method="post">
+				<p class="form-title">合同类型设置&nbsp;&nbsp;<a href="javascript:history.go(-1);">返回</a></p>
+				<div id="type_box">
+					<volist name="contracttype" id="vo">
+					<div class="form-group">
+						<label for="name" class="col-sm-2 control-label">名称{$key}</label>
+						<div class="col-sm-3">
+							<input class="form-control" id="name" type="text" value="{$vo}" name="name[{$key}]">
+						</div>
+						<if condition="$key gt 3">
+							<input type="button" class="btn btn-xs deletecontractType" value="删除" />
+						</if>
+					</div>
+					</volist>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label"></label>
+					<div class="col-sm-3">
+						<input type="button" class="btn btn-primary"  id="addcontractType" value="添加" />&nbsp;&nbsp;
+						<input class="btn btn-primary" type="submit" value="保存"/>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+$(function(){
+	$('#addcontractType').click(function(){
+		var num = $('#type_box').children().length + 1;
+		var str = '<div class="form-group"><label for="name" class="col-sm-2 control-label">名称'+num+'</label><div class="col-sm-3"><input class="form-control" id="name" type="text" value="" name="name['+num+']"></div>';
+		if(num > 3){
+			str+='<input type="button" class="btn btn-xs deletecontractType" value="[ 删除 ]" />';
+		}
+		str+='</div>';
+		$('#type_box').append(str);
+	});
+	$('#type_box').on('click','.deletecontractType',function(){
+		$(this).parent().remove();
+	});
+})
+</script>
+<include file="Public:alert" />
+<include file="Public:footer" />

@@ -1,0 +1,82 @@
+<include file="Core:Public:header" />
+{:W('Navigation')}
+<script src="__PUBLIC__/js/datepicker/WdatePicker.js"></script>
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">请假条详情</div>
+		<div class="row-table-body">
+			<form class="form-horizontal " action="{:U('hrm/leave/add')}" method="post">
+				<p class="form-title">
+					请假条详情&nbsp;&nbsp;<a href="{:U('hrm/leave/edit','id='.$leave[leave_id])}">编辑</a>
+					&nbsp;&nbsp;<a href="javascript:history.go(-1);">返回</a>
+					<a href="javascript:void(0);" id="leave_pass" class="pull-right btn btn-primary btn-xs" >已通过</a>
+					<a href="javascript:void(0);" id="leave_fail" class="pull-right btn btn-primary btn-xs" >未通过</a>
+				</p>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">请假人</label>
+					<div class="col-sm-3">{$leave.user_name}</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">类型</label>
+					<div class="col-sm-3">{$leave.category_name}</div>
+					<label for="name" class="col-sm-2 control-label">状态</label>
+					<div class="col-sm-3">
+						<if condition="'0' eq $leave['status']">
+							<span style="color:#F8971C">{$leave.status_name}</span>
+						<elseif condition="'1' eq $leave['status']" />
+							<span style="color:#0EB930">{$leave.status_name}</span>
+						<else />
+							<span style="color:#FF3908;">{$leave.status_name}</span>
+						</if>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">开始时间</label>
+					<div class="col-sm-3">{$leave.start_time|date='Y-m-d H:i:s',###}</div>
+					<label for="name" class="col-sm-2 control-label">结束时间</label>
+					<div class="col-sm-3">{$leave.end_time|date='Y-m-d H:i:s',###}</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">计算结果</label>
+					<div class="col-sm-3">
+						共<span>{$leave.leave_days}</span>天<span>{$leave.leave_hours}</span>小时
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">填写人</label>
+					<div class="col-sm-3">
+						{$leave.maker_user_name}
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">请假原因</label>
+					<div class="col-sm-8">
+						<pre style="min-height:150px;">{$leave.content}</pre>
+					</div>
+				</div>
+			</form>	
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script>
+	/**
+	 * 通过审核
+	 **/
+	$('#leave_pass').click(function(){
+		if(confirm('确定要审核通过吗？')){
+			location.href="{:U('hrm/leave/auditing','id='.$leave['leave_id'].'&status=1')}";
+		}
+	});
+	
+	/**
+	 * 未通过审核
+	 **/
+	$('#leave_fail').click(function(){
+		if(confirm('确定要未通审核过吗？')){
+			location.href="{:U('hrm/leave/auditing','id='.$leave['leave_id'].'&status=2')}";
+		}
+	});
+</script>
+<include file="Core:Public:alert" />
+<include file="Core:Public:footer" />

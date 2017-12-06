@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="utf-8">
+		<title>{:C('defaultinfo.name')} - Powered By 悟空HRM</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<meta name="description" content=""/>
+		<meta name="author" content="悟空HRMS"/>
+		<link rel="shortcut icon" href="__PUBLIC__/ico/favicon.png"/>
+		<link rel="stylesheet" href="__PUBLIC__/css/bootstrap.css">
+		<link rel="stylesheet" href="__PUBLIC__/css/hrms.css">
+		<script src="__PUBLIC__/js/jquery.min.js"></script>
+		<script src="__PUBLIC__/js/bootstrap.min.js"></script>
+		<!--[if lt IE 9]>
+		<script src="__PUBLIC__/js/html5shiv.min.js"></script>
+		<script src="__PUBLIC__/js/respond.min.js"></script>
+		<![endif]-->
+	</head>
+	<body style="background-image: none">
+	<div id="wrap" style="padding:0px;">
+		<div class="login-logo"><img src="{:C('defaultinfo.logo')}"></div>
+		<div class="login-bg"></div>
+		<div class="login-box">
+			<div class="login-main">
+				<form class="form-signin" role="form" action="{:U('core/user/active')}" method="post" >
+					<h2>{:C('defaultinfo.name')}设置密码</h2>
+					<p><input class="form-control" type="text" name="password" autofocus="" required="" placeholder="新密码"></p>
+					<input type="hidden" name="user_id" value="{$Think.get.user_id}"/>
+					<input type="hidden" name="verify_code" value="{$Think.get.verify_code}"/>
+					<p><input name="submit" class="btn btn-primary" type="submit" value="确认设置"/> &nbsp; <a href="{:U('core/user/login')}">登录</a></p>
+				</form>
+				<div class="footer">
+					<p class="text-muted credit">
+						悟空HRM © 2013--{:date('Y')}
+					</p><p class="text-muted credit">
+						郑州卡卡罗特软件科技有限公司
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+<include file="Public:alert" />
+<include file="Public:footer" />

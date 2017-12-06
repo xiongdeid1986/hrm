@@ -1,0 +1,76 @@
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h4 class="modal-title" id="myModalLabel"><b>操作列表</b></h4>
+		</div>
+		<div class="modal-body form-horizontal">
+			<ul class="nav nav-tabs">
+				<volist name="controlList" id="g">
+				<li class="<eq name="i" value="1">active</eq>"><a href="#{$key}" data-toggle="tab">{:C('APP_GROUP_NAME.'.strtolower($key))}</a></li>
+				</volist>
+			</ul>
+			<div class="tab-content">
+				<volist name="controlList" id="g">
+				<div class="tab-pane <eq name="i" value="1">active</eq>" id="{$key}">
+					<table class="table table-striped">
+						<tbody>
+							<volist name="g" id="m"  mod="2">
+							<tr>
+								<td align="right">{$module_name[$key]}<input type="checkbox" name="check_all"  rel="{$key}" class="check_all"/></td>
+								<td width="80%">
+									<volist name="m" id="a">
+										<input type="checkbox" name="control_name" class="{$a.m}" value="{$a.control_id}" <if condition="in_array($a['control_id'], $control_idsArr)">checked="checked"</if>/>
+										<span>{$a.name}</span>&nbsp;&nbsp;&nbsp;
+									</volist>
+								</td>
+							</tr>
+							</volist>
+						</tbody>
+					</table>
+				</div>
+				</volist>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<input type="submit" id="control_submit" class="btn btn-primary" value="确定" />
+			<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	/**
+	 * 全选
+	 *
+	 **/
+	$(function(){
+		$(".check_all").click(function(){
+			var rel = $(this).attr('rel');
+			$("input[class='"+rel+"']").prop('checked', $(this).prop("checked"));
+		});
+	});
+	
+	/**
+	 * 将选择的值传递到上个界面
+	 *
+	 **/
+	var item='';
+	var control_name = "";
+	$("#control_submit").click(function(){
+		$("input:checkbox[name='control_name']:checked").each(function(index,e){
+			if($("input:checkbox[name='control_name']:checked")){
+				item += $(e).val() + ",";
+			}
+		});
+		$("input[name='control_ids']").val(item);
+		
+		
+		$("input:checkbox[name='control_name']:checked").each(function(index,e){
+			if("input:checkbox[name='control_name']:checked"){
+				control_name += $(e).next().html() + ","; 
+			}
+		});
+		$("input[name='control_name']").val(control_name);
+		$('#alert').modal('hide');
+	});
+</script>

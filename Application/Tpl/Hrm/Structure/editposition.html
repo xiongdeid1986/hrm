@@ -1,0 +1,89 @@
+<div class="modal-dialog">
+	<div class="modal-content">
+		<form action="{:U('hrm/structure/editPosition')}" method="post" >
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h4 class="modal-title" id="myModalLabel">编辑岗位</h4>
+		</div>
+		<div class="modal-body form-horizontal">
+			
+				<div class="form-group">
+					<label class="col-sm-4 control-label" for="name">岗位名称</label>
+					<div class="col-sm-6">
+						<input id="name" class="form-control" type="text" name="name" value="{$position['name']}">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-4 control-label" for="name">所属部门</label>
+					<div class="col-sm-6">
+						<select class="form-control" name="department_id" onchange="changeRoleContent(this.value)">
+							<option value="0">请选择部门</option>
+						<volist name="department_list" id="vo">
+							<option value="{$vo.department_id}" <if condition="$position['department_id'] eq $vo['department_id']">selected="selected"</if>>&nbsp;&nbsp;&nbsp;&nbsp;{$vo.name}</option><br/>
+						</volist>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-4 control-label" for="name">上级岗位</label>
+					<div class="col-sm-6">
+						<select class="form-control" id="parent_id" name="parent_id">
+							<option value="0">请选择岗位</option>
+						<volist name="position_list" id="vo">
+							<option value="{$vo.position_id}" <if condition="$position['parent_id'] eq $vo['position_id']">selected="selected"</if>>&nbsp;&nbsp;&nbsp;&nbsp;{$vo.name}</option>
+						</volist>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-4 control-label" for="name">编制人数</label>
+					<div class="col-sm-6">
+						<input id="name" class="form-control" type="text" name="plan_num" value="{$position['plan_num']}">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-4 control-label" for="name">在职人数</label>
+					<div class="col-sm-6">
+						<input id="name" class="form-control" type="text" name="real_num" value="{$position.real_num}">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-4 control-label" for="name">部门描述</label>
+					<div class="col-sm-6">
+						<textarea class="form-control" rows="2" name="description">{$position.description}</textarea>
+					</div>
+				</div>
+		</div>
+		<div class="modal-footer">
+			<input type="hidden" name="position_id" value="{$position.position_id}" />
+			<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+			<input type="submit" class="btn btn-primary" value="保存" />
+		</div>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+function changeRoleContent(department_id){
+		if(department_id == ''){
+			$("#parent_id").html('<option value="">请选择上级岗位</option>');
+		}else{
+			$.ajax({
+				type:'get',
+				url:'{:U("hrm/structure/getPositionDepartment","id=")}'+department_id,
+				async:false,
+				success:function(data){
+					if(data){
+						options = '<option value="">请选择上级岗位</option>';
+						$.each(data, function(k, v){
+							options += '<option value="'+v.position_id+'">'+v.name+'</option>';
+						});
+						$("#parent_id").html(options);
+					}else{
+						$("#parent_id").html('<option value="">请选择上级岗位</option>');
+					}
+				},
+				dataType:'json'
+			});		
+		}
+	}
+</script>

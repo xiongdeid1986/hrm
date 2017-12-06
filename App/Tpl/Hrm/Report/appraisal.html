@@ -1,0 +1,98 @@
+<include file="Core:Public:header" />
+{:W('Navigation')}
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">绩效考核报表</div>
+		<div class="row-table-body">
+			<form class="form-inline" action="{:U('hrm/report/appraisal')}" method="post">
+				考核表<select class="form-control" name="appraisal_manager_id">
+				<option value="0">--选择考核表--</option>
+				<volist name="appraisal" id="vo">
+				<option value="{$vo.appraisal_manager_id}" <if condition="$_POST['appraisal_manager_id'] == $vo['appraisal_manager_id']">selected="selected"</if> >{$vo.name}</option>
+				</volist>
+				</select>&nbsp;&nbsp;
+				员工<input class="form-control" id="to_name" name="user_name" value="{$_POST['user_name']}" type="text"/><input id="to_user_id" value="{$_POST['user_id']}" type="hidden" name="user_id"/>
+				&nbsp;&nbsp;<input type="submit" value="搜索" class="btn btn-primary btn-xs"/>
+			</form>
+			<div>
+				<if condition="$appraisal_manager">
+				<table class="table table-bordered">
+					<tr>
+						<td>考核对象</td>
+						<td>岗位</td>
+						<td>考核表</td>
+						<td>分数</td>
+						<td>操作</td>
+					</tr>
+					<volist name="appraisal_manager['examinee_user']" id="vo">
+					<tr>
+						<td>{$vo.name}</td>
+						<td>{$vo.department_name} > {$vo.position_name}</td>
+						<td>{$appraisal_manager.name}</td>
+						<td>{$vo.sum_point}</td>
+						<td><a href="javascript:void(0);" rel="{$appraisal_manager['appraisal_manager_id']}" value="{$vo['user_id']}" class="detail_results">详细</a></td>
+					</tr>
+					</volist>
+				</table>
+				<script type="text/javascript">
+					$(function(){
+						$(".detail_results").click(function(){
+							var id = $(this).attr('rel');
+							var uid = $(this).attr('value');
+							$('#alert').modal({
+								show:true,
+								remote:"{:U('hrm/appraisalpoint/detailResults','id=')}"+id+'&uid='+uid
+							});
+						});
+					});
+				</script>
+				<elseif condition="$appraisalmanager && $appraisalmanager" />
+				<table class="table table-bordered">
+					<tr>
+						<td>考核内容名称</td>
+						<td>得分</td>
+					</tr>
+					<volist name="appraisalmanager['template']['score']" id="vo">
+					<tr>
+						<td>{$vo.name}</td>
+						<td>{$preSocreAvgPoint[$vo['score_id']]}</td>
+					</tr>
+					</volist>
+					<tr>
+						<td>总计</td>
+						<td>{:array_sum($preSocreAvgPoint)}</td>
+					</tr>
+				</table>
+				<elseif condition="$userappraisallist"/>
+					<table class="table table-bordered">
+					<tr>
+						<td>考核表</td>
+						<td>得分</td>
+					</tr>
+					<volist name="userappraisallist" id="vo">
+					<tr>
+						<td>{$vo.appraisal_manager.name}</td>
+						<td>{$vo.sum_point}</td>
+					</tr>
+					</volist>
+				</table>
+				<else />
+					--暂无数据--
+				</if>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+$(function(){
+	$('#to_name').click(function(){
+		$('#alert').modal({
+			show:true,
+			remote:"{:U('core/user/getuserrindex')}"
+		}); 
+	});
+});
+</script>
+<include file="Core:Public:alert" />
+<include file="Core:Public:footer" />

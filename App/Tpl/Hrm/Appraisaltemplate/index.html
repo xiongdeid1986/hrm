@@ -1,0 +1,78 @@
+<include file="Core:Public:header" />
+{:W('Navigation')}
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">绩效考核模板管理</div>
+		<div class="row-table-body">
+			<p class="form-title">
+				绩效考核模板管理&nbsp;&nbsp;
+				<a href="{:U('hrm/appraisaltemplate/category')}">模板类型管理</a>
+				<a href="{:U('hrm/appraisaltemplate/add')}" class="pull-right btn btn-primary btn-xs" >添加</a>
+			</p>
+			<if condition="empty($templatelist)">
+				<div>---暂无数据---</div>
+			<else />
+			<form class="form-horizontal " id="form1"  method="post">
+				<table class="table" style="margin-bottom:0px;">
+					<tbody>
+						<tr>
+							<th><input type="checkbox" name="appraisal_template_id[]" id="check_all"/></th>
+							<th>模板名称</th>
+							<th>模板类型</th>
+							<th>创建时间</th>
+							<th>创建人</th>
+							<th>操作</th>
+						</tr>
+						<volist name="templatelist" id="vo">
+						<tr>
+							<td><input type="checkbox" name="id[]" class="check_list" value="{$vo.appraisal_template_id}" /></td>
+							<td><a href="{:U('hrm/appraisaltemplate/view','id='.$vo['appraisal_template_id'])}">{$vo.name}</a></td>
+							<td>{$vo.category.name}</td>
+							<td>{$vo.create_time|date='Y-m-d H:i:s',###}</td>
+							<td>{$vo.creator_user_name}</td>
+							<td>
+								<a href="{:U('hrm/appraisaltemplate/view','id='.$vo['appraisal_template_id'])}">查看</a>&nbsp;|&nbsp;
+								<a href="{:U('hrm/appraisaltemplate/edit','id='.$vo['appraisal_template_id'])}">编辑</a>&nbsp;|&nbsp;
+								<a href="{:U('hrm/appraisaltemplate/delete','id='.$vo['appraisal_template_id'])}">删除</a>
+							</td>
+						</tr>
+						</volist>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td colspan="7">
+								<input class="btn btn-primary btn-xs" type="submit" id="delete" value="删除"/>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="7" align="center">{$page}<div class="clear"></div></td>
+						</tr>
+					</tfoot>
+				</table>
+			</form>
+			</if>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+	/**
+	 * 全选
+	 **/
+	$("#check_all").click(function(){
+		$("input[class='check_list']").prop('checked',$(this).prop('checked'));
+	});
+	
+	/**
+	 * 批量删除
+	 **/
+	$("#delete").click(function(){
+		if(confirm('确定要删除吗？')){
+			$("#form1").attr("action","{:U('hrm/appraisaltemplate/delete')}");
+			$("#form1").submit();
+		}
+	});
+	
+</script>
+<include file="Core:Public:alert" />
+<include file="Core:Public:footer" />

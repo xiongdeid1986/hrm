@@ -1,0 +1,82 @@
+<include file="Core:Public:header" />
+{:W('Navigation')}
+<script src="__PUBLIC__/js/datepicker/WdatePicker.js" type="text/javascript"></script>
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">薪资发放</div>
+		<div class="row-table-body">
+			<p class="form-title">
+				<a class="pull-right btn btn-primary btn-xs" href="{:U('hrm/salary/index')}">已发薪资</a>发放薪资
+			</p>
+			<form class="form-horizontal" action="{:U('hrm/salary/add')}" method="post">
+				<div id="userbox">
+					<div class="form-group">
+						<label for="month" class="col-sm-1 control-label">薪资月份</label>
+						<div class="col-sm-3">
+							<input name="month" type="text" class="form-control" id="month" onFocus="WdatePicker({dateFmt:'yyyyMM'})"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="name" class="col-sm-1 control-label">选择套帐</label>
+						<div class="col-sm-3">
+							<select class="form-control" id="suit_id" name="suit_id">
+								<option value="0">--请选择薪资套帐--</option>
+								<volist name="suit_list" id="vo" >
+								<option value="{$vo.salary_suit_id}">{$vo.name}</option>
+								</volist>
+							</select>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label for="insurance_type" class="col-sm-1 control-label">发放员工</label>
+						<div class="col-sm-9" id="itembox">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label"></label>
+						<div class="col-sm-3">
+							<input class="btn btn-primary" type="submit" value="保存"/>&nbsp;&nbsp;&nbsp;&nbsp;
+							<input type="button" class="btn" value="取消" onclick="javascript:history.go(-1);"/>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	var suittable = new Array();
+	var suitiuput = new Array();
+	<volist name="suit_list" id="vo" >
+		suittable['{$key}'] ='<table class="table table-bordered"><tbody><tr><td>员工姓名</td>';
+		suitiuput['{$key}'] ='<tr><td><input type="text" class="user_name"><input type="hidden" name="user_id[]"></td>';
+		<foreach name="vo.items" item="v" key="k">
+		suittable['{$key}'] +='<td>{$v.name}</td><td>{$v.name}补充说明</td>';
+		suitiuput['{$key}'] +='<td><input type="text" name="{$v.item}[]"></td><td><input type="text" name="{$v.item}content[]"></td>';
+		</foreach>
+		suittable['{$key}'] +='<td><input type="button" class="btn btn-primary btn-xs adduser" value="添加员工" /></td></tr></table>';
+		suitiuput['{$key}'] +='<td><input type="button" class="btn btn-primary btn-xs deleteuser" value="删除" /></td></tr>';
+	</volist>
+	$(function(){
+		$('#suit_id').change(function(){
+			$('#itembox').html(suittable['id'+$(this).val()]);
+		});
+		$('#userbox').on('click','.user_name',function(){
+			$(this).addClass('active');
+			$('#alert').modal({
+				show:true,
+				remote:"{:U('hrm/salary/selectuser')}"
+			}); 
+		});
+		$('#userbox').on('click','.deleteuser',function(){
+			$(this).parent().parent().remove();
+		});
+		$('#userbox').on('click','.adduser',function(){
+			$(this).parent().parent().parent().append(suitiuput['id'+$('#suit_id').val()]);
+		});
+	});
+</script>
+<div class="clear"></div>
+<include file="Core:Public:alert" />
+<include file="Core:Public:footer" />

@@ -1,0 +1,77 @@
+<include file="Core:Public:header" />
+{:W('Navigation')}
+<script src="__PUBLIC__/js/datepicker/WdatePicker.js"></script>
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">薪资报表</div>
+		<div class="row-table-body">
+			<p class="form-title">薪资报表</p>
+			<form name="form1" action="{:U('hrm/salary/monthly')}" method="post">
+				<div class="form-inline">
+					选择对象:<input type="text" name="user_name" id="to_name" class="form-control" value="{$_POST['user_name']|default='全部'}"/>
+					<input type="hidden" name="user_id" id="to_user_id" value="{$_POST['user_id']}"/>
+					日期:
+					<input type="text" name="start_time" class="form-control" onclick="WdatePicker({dateFmt:'yyyyMM'})" value="{$_POST['start_time']|default = date('Ym')}"/>&nbsp;--&nbsp;<input type="text" name="end_time"  class="form-control" onclick="WdatePicker({dateFmt:'yyyyMM'})" value="{$_POST['end_time']|default = date('Ym')}"/>&nbsp;&nbsp;
+					<span><input type="submit" class="btn" value="查询"/></span>
+				</div>
+			</form>
+			<if condition="empty($monthly)">
+				<div>---暂无数据---</div>
+			<else />
+			<form class="form-horizontal " id="form1"  method="post">
+				<table class="table" style="margin-bottom:0px;">
+					<tbody>
+						<tr>
+							<th>姓名</th>
+							<th>薪资月份</th>
+							<th>套帐名称</th>
+							<th>实发薪资</th>
+						</tr>
+						<volist name="monthly" id="vo">
+						<tr>
+							<td>{$vo.username}</td>
+							<td>{$vo.month}</td>
+							<td>{$vo.suit.name}</td>
+							<td>
+								<a href="javascript:void(0);" class="show_tips" data-content="
+								<foreach name="vo['suit']['items']" item="v" key="k">
+									<php>$content = $v['item'].'content';</php>
+									{$v['name']}:{$vo['items'][$v['item']]|default=0}元, {$vo['items'][$content]}<br />
+								</foreach>
+								">{$vo.money}元</a>
+							</td>
+						</tr>
+						</volist>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td colspan="10" align="center">{$page}<div class="clear"></div></td>
+						</tr>
+					</tfoot>
+				</table>
+			</form>
+			</if>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+	/**
+	 * 选择对象
+	 **/
+	$('#to_name').click(function(){
+		$('#alert').modal({
+			show:true,
+			remote:'{:U("core/user/getuserindex","self=1")}'
+		});
+	});
+	
+	$('.show_tips').popover({
+		html:true,
+		trigger:'hover'
+	});
+	
+
+</script>
+<include file="Core:Public:alert" />
+<include file="Core:Public:footer" />

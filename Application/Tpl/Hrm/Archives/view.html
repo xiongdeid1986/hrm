@@ -1,0 +1,250 @@
+<include file="Core:Public:header" />
+{:W('Navigation')}
+<script src="__PUBLIC__/js/datepicker/WdatePicker.js" type="text/javascript"></script>
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">员工档案</div>
+		<div class="row-table-body">
+			<p class="form-title">
+				<a class="pull-right btn btn-primary btn-xs" href='{:U("hrm/archives/index")}' style="margin-left:10px;">员工档案列表</a>
+				<a class="pull-right btn btn-primary btn-xs" href='{:U("hrm/archives/edit","user_id=".$info["user_id"])}'>编辑</a>
+				员工档案&nbsp;&nbsp;<a href="javascript:history.go(-1);">返回</a>
+			</p>
+			<div class="form-group">
+				<label for="to_name" class="col-sm-2 control-label">姓名</label>
+				<div class="col-sm-3">
+					{$info.username}
+				</div>
+				<label for="id_num" class="col-sm-2 control-label">证件号码</label>
+				<div class="col-sm-3">
+					{$info.id_num}
+				</div>
+			</div>
+			<div class="clear"></div>
+			<div class="form-group">
+				<label for="origin" class="col-sm-2 control-label">籍贯</label>
+				<div class="col-sm-3">
+					{$info.origin}
+				</div>
+				<label for="archives_num" class="col-sm-2 control-label">档案编号</label>
+				<div class="col-sm-3">
+					{$info.archives_num}
+				</div>
+			</div>
+			<div class="clear"></div>
+			<div class="form-group">
+				<label for="bankcard" class="col-sm-2 control-label">工资卡号</label>
+				<div class="col-sm-3">
+					{$info.bankcard}
+				</div>
+				<label for="tbno" class="col-sm-2 control-label">社保号</label>
+				<div class="col-sm-3">
+					{$info.tbno}
+				</div>
+			</div>
+			<div class="clear"></div>
+			<div class="form-group">
+				<label for="old_name" class="col-sm-2 control-label">曾用名</label>
+				<div class="col-sm-3">
+					{$info.old_name}
+				</div>
+				<label for="sex" class="col-sm-2 control-label">性别</label>
+				<div class="col-sm-3">
+					<if condition="$info['sex'] == 1">
+					男
+					<elseif condition="$info['sex'] == 2"/>
+					女
+					</if>
+				</div>
+			</div>
+			<div class="clear"></div>
+			<div class="form-group">
+				<label for="birthday" class="col-sm-2 control-label">出生日期</label>
+				<div class="col-sm-3">
+					{$info.birthday|date='Y-m-d',###}
+				</div>
+				<label for="birthplace" class="col-sm-2 control-label">出生地</label>
+				<div class="col-sm-3">
+					{$info.birthplace}
+				</div>
+			</div>
+			<div class="clear"></div>
+			<div class="form-group">
+				<label for="nation" class="col-sm-2 control-label">民族</label>
+				<div class="col-sm-3">
+					{$info.nation}
+				</div>
+				<label for="partisan" class="col-sm-2 control-label">政治面貌</label>
+				<div class="col-sm-3">
+					<if condition="$info['partisan'] == 1">
+					群众		
+					<elseif condition="$info['partisan'] == 2" />
+					共青团员
+					<elseif condition="$info['partisan'] == 3" />
+					共产党员
+					<elseif condition="$info['partisan'] == 4" />
+					其他党派
+					</if>
+				</div>
+			</div>
+			<div class="clear"></div>
+			<div class="form-group">
+				<label for="accounts" class="col-sm-2 control-label">户口</label>
+				<div class="col-sm-3">
+					{$info.accounts}
+				</div>
+				<label for="accounts_status" class="col-sm-2 control-label">户口性质</label>
+				<div class="col-sm-3">
+					<if condition="$info['accounts_status'] == 1">
+					非农
+					<elseif condition="$info['accounts_status'] == 2" />
+					农业
+					</if>
+				</div>
+			</div>
+			<div class="clear"></div>
+			<div class="form-group">
+				<label for="marital_status" class="col-sm-2 control-label">婚姻状况</label>
+				<div class="col-sm-3">
+					<if condition="$info['marital_status'] == 1">
+					已婚
+					<elseif condition="$info['marital_status'] == 2"/>
+					未婚
+					</if>
+				</div>
+				<label for="ygsf" class="col-sm-2 control-label">员工身份</label>
+				<div class="col-sm-3">
+					<if condition="$info['ygsf'] == 1">
+					农民
+					<elseif condition="$info['ygsf'] == 2" />
+					工人
+					<elseif condition="$info['ygsf'] == 3" />
+					干部
+					</if>
+				</div>
+			</div>
+			<div class="clear"></div>
+			<div class="form-group">
+				<label for="nationality" class="col-sm-2 control-label">国籍</label>
+				<div class="col-sm-3">
+					{$info.nationality}
+				</div>
+				<label for="document_type" class="col-sm-2 control-label">证件类型</label>
+				<div class="col-sm-3">
+					<if condition="$info['document_type'] == 1">
+					身份证
+					<elseif condition="$info['document_type'] == 2" />
+					护照
+					<elseif condition="$info['document_type'] == 3" />
+					驾驶证
+					<elseif condition="$info['document_type'] == 4" />
+					军官证
+					<esleif condition="$info['document_type'] == 5" />
+					毕业证
+					<esleif condition="$info['document_type'] == 6" />
+					技师证
+					</if>
+				</div>
+			</div>
+			<div class="clear"></div>
+			<div class="form-group">
+				<label for="health" class="col-sm-2 control-label">健康状况</label>
+				<div class="col-sm-3">
+					<if condition="$info['health'] == 1">
+					较差
+					<elseif condition="$info['health'] == 2" />
+					一般
+					<elseif condition="$info['health'] == 3" />
+					良好
+					</if>
+				</div>
+				<label for="height" class="col-sm-2 control-label">身高</label>
+				<div class="col-sm-3">
+					{$info.height}
+				</div>
+			</div>
+			<div class="clear"></div>
+			<div class="form-group">
+				<label for="weight" class="col-sm-2 control-label">体重</label>
+				<div class="col-sm-3">
+					{$info.weight}
+				</div>
+				<label for="vision" class="col-sm-2 control-label">视力</label>
+				<div class="col-sm-3">
+					{$info.vision}
+				</div>
+			</div>
+			<div class="clear"></div>
+			<div class="form-group">
+				<label for="education" class="col-sm-2 control-label">最高学历</label>
+				<div class="col-sm-3">
+					<if condition="$info['education'] == 1">
+					小学
+					<elseif condition="$info['education'] == 2" />
+					初中
+					<esleif condition="$info['education'] == 3" />
+					高中
+					<esleif condition="$info['education'] == 4" />
+					大专
+					<elseif condition="$info['education'] == 5" />
+					本科
+					<elseif condition="$info['education'] == 6" />
+					硕士
+					<elseif condition="$info['education'] == 7" />
+					博士
+					</if>
+				</div>
+				<label for="degree" class="col-sm-2 control-label">最高学位</label>
+				<div class="col-sm-3">
+					<if condition="$info['degree'] == 1">
+					学士
+					<elseif condition="$info['degree'] == 2" />
+					双学士
+					<elseif condition="$info['degree'] == 3" />
+					硕士
+					<elseif condition="$info['degree'] == 4" />
+					博士
+					<elseif condition="$info['degree'] == 5" />
+					博士后
+					</if>
+				</div>
+			</div>
+			<div class="clear"></div>
+			<div class="form-group">
+				<label for="school" class="col-sm-2 control-label">毕业院校</label>
+				<div class="col-sm-3">
+					{$info.school}
+				</div>
+				<label for="speciality" class="col-sm-2 control-label">专业</label>
+				<div class="col-sm-3">
+					{$info.speciality}
+				</div>
+			</div>
+			<div class="clear"></div>
+			<div class="form-group">
+				<label for="job_title" class="col-sm-2 control-label">职称</label>
+				<div class="col-sm-3">
+					{$info.job_title}
+				</div>
+				<label for="work_date" class="col-sm-2 control-label">参加工作日期</label>
+				<div class="col-sm-3">
+					{$info.work_date|date='Y-m-d',###}
+				</div>
+			</div>
+			<div class="clear"></div>
+			<div class="form-group">
+				<label for="length_work" class="col-sm-2 control-label">工龄</label>
+				<div class="col-sm-3">
+					{$info.length_work}
+				</div>
+				<label for="feel_length_work" class="col-sm-2 control-label">空闲工龄</label>
+				<div class="col-sm-3">
+					{$info.feel_length_work}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<include file="Core:Public:alert" />
+<include file="Core:Public:footer" />

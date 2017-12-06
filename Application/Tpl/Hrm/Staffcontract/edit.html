@@ -1,0 +1,132 @@
+<include file="Core:Public:header" />
+{:W('Navigation')}
+<script src="__PUBLIC__/js/datepicker/WdatePicker.js"></script>
+<script charset="utf-8" src="__PUBLIC__/js/editor/kindeditor.js"></script>
+<script charset="utf-8" src="__PUBLIC__/js/editor/lang/zh_CN.js"></script>
+<script>
+        KindEditor.ready(function(K) {
+                window.editor = K.create('#content',{
+			uploadJson:"{:U('core/file/editor')}"
+		});
+        });
+</script>
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">变更员工合同</div>
+		<div class="row-table-body">
+			<p class="form-title"><a class="pull-right btn btn-primary btn-xs" href="{:U('hrm/staffcontract/index')}">合同列表</a>变更员工合同</p>
+			<form action="{:U('hrm/staffcontract/edit')}" class="form-horizontal" enctype="multipart/form-data" method="post">
+				<input type="hidden" value="{$info.staffcontract_id}" name="contract_id" />
+				<div class="form-group">
+					<label for="to_name" class="col-sm-2 control-label">员工姓名</label>
+					<div class="col-sm-3">
+						<input id="to_name" class="form-control" type="text" value="{$info.user_name}">
+						<input id="to_user_id" type="hidden" name="to_user_id" value="{$info.user_id}">
+					</div>
+					<label for="type" class="col-sm-2 control-label">合同类型</label>
+					<div class="col-sm-3">
+						<select id="type" class="form-control" name="type">
+							<option value="0">--请选择--</option>
+							<volist  name=":C('contracttype')" id ="vo">
+							<option value="{$key}" <if condition="$info['type'] == $key">selected="selected"</if> >{$vo}</option>
+							</volist>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="number" class="col-sm-2 control-label">合同编号</label>
+					<div class="col-sm-3">
+						<input id="number" class="form-control" type="text" name="number" value="{$info.number}">
+					</div>
+					<label for="name" class="col-sm-2 control-label">合同名称</label>
+					<div class="col-sm-3">
+						<input id="name" class="form-control" type="text" name="name" value="{$info.name}">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="status" class="col-sm-2 control-label">合同状态</label>
+					<div class="col-sm-3">
+						<select id="status" class="form-control" name="status">
+							<option value="0">--请选择--</option>
+							<volist  name=":C('contractstatus')" id ="vo">
+							<option value="{$key}" <if condition="$info['status'] == $key">selected="selected"</if> >{$vo}</option>
+							</volist>
+						</select>
+					</div>
+					<label for="time_type" class="col-sm-2 control-label">期限类型</label>
+					<div class="col-sm-3">
+						<label class="checkbox-inline">
+							<input type="radio" id="time_type" value="1" name="time_type" <if condition="$info['time_type'] == 1">checked="checked"</if>>固定期限
+						</label>
+						<label class="checkbox-inline">
+							<input type="radio" id="time_type" value="2" name="time_type" <if condition="$info['time_type'] == 2">checked="checked"</if>>无固定期限
+						</label>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="start_time" class="col-sm-2 control-label">开始时间</label>
+					<div class="col-sm-3">
+						<input id="start_time" class="form-control" type="text" name="start_time" value="<notempty name='info.start_time'>{$info.start_time|date='Y-m-d',###}</notempty>" onclick="WdatePicker()">
+					</div>
+					<label for="end_time" class="col-sm-2 control-label">截止时间</label>
+					<div class="col-sm-3">
+						<input id="end_time" class="form-control" type="text" name="end_time" value="<notempty name='info.end_time'>{$info.end_time|date='Y-m-d',###}</notempty>" onclick="WdatePicker()">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="content" class="col-sm-2 control-label">合同内容</label>
+					<div class="col-sm-9">
+						<textarea id="content" name="content" rows="15" class="form-control">{$info.content}</textarea>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="content" class="col-sm-2 control-label">上传附件</label>
+					<div class="col-sm-6" id="upload_file">
+					<volist name="info.file" id="vo">
+						<p><a href="{$vo.url}" target="_blank">{$vo.name}</a> 大小：{$vo.size}K <input type="button" class="btn btn-primary btn-xs deletefile" rel="{$vo.file_id}" value="删除" /></p>
+					</volist>
+						<input id="file" name="file[]" type="file" /><input type="button" class="btn btn-primary btn-xs"  id="addcontractType" value="增加" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="content" class="col-sm-2 control-label"></label>
+					<div class="col-sm-9">
+						<input type="submit" class="btn btn-primary" value="确定" />
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+$(function(){
+	$('#to_name').click(function(){
+		$('#alert').modal({
+			show:true,
+			remote:'{:U("core/user/getuserrindex")}'
+		});
+	});
+	$('#addcontractType').click(function(){
+		$(this).after('<input id="file" name="file[]" type="file" /><input type="button" class="btn btn-xs deletecontractType" value="[删除]" />');
+	});
+	$('#upload_file').on('click','.deletecontractType',function(){
+		$(this).prev().remove();
+		$(this).remove();
+	});
+	$('.deletefile').click(function(){
+		var _this = this;
+		var file_id = $(this).attr('rel');
+		$.get('{:U("hrm/staffcontract/filedelete","contract_id=".$info["staffcontract_id"]."&id=")}'+file_id,function(data){
+			if(data == 'true'){
+				deletefile(_this);
+			}
+		},'json');
+	});
+});
+function deletefile(obj){
+		$(obj).parent().remove();
+	}
+</script>
+<include file="Core:Public:alert" />
+<include file="Core:Public:footer" />

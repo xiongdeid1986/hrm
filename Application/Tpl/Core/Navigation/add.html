@@ -1,0 +1,76 @@
+<include file="Public:header" />
+{:W('Navigation')}
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">添加菜单</div>
+		<div class="row-table-body">
+			<form class="form-horizontal " action="{:U('core/navigation/add')}" method="post">
+				<p class="form-title">
+				<a class="pull-right btn btn-primary btn-xs" href="{:U('core/navigation/index')}">菜单列表</a>
+				添加菜单</p>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">名称</label>
+					<div class="col-sm-3">
+						<input class="form-control" type="text" name="name">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">描述</label>
+					<div class="col-sm-3">
+						<input class="form-control" type="text" name="description">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">默认显示</label>
+					<div class="col-sm-3">
+						<input class="form-control defaultDispalyDialog" type="text" name="default_display_name" ><input type="hidden" name="default_display" value=""/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">菜单功能</label>
+					<div class="col-sm-3">
+						<input class="form-control controlDialog" type="text" name="control_name" ><input type="hidden" name="control_ids" value=""/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">排序</label>
+					<div class="col-sm-3">
+						<input class="form-control"  type="text" name="sort_id"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label"></label>
+					<div class="col-sm-3">
+						<input name="submit" class="btn btn-primary" type="submit" value="保存"/>&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="btn" value="取消" onclick="javascript:history.go(-1);"/>
+					</div>
+				</div>
+	
+			</form>
+				
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script>
+	/**
+	 * 添加默认显示的操作
+	 **/
+	$('.defaultDispalyDialog').click(function(){
+		$('#alert').modal({
+			show:true,
+			remote:'{:U("core/navigation/defaultDispalyDialog")}'
+		});
+	});
+	
+	/**
+	 * 为导航添加功能
+	 **/
+	$('.controlDialog').click(function(){
+		$('#alert').modal({
+			show:true,
+			remote:'{:U("core/navigation/controlDialog")}'
+		});
+	});
+</script>
+<include file="Public:alert" />
+<include file="Public:footer" />

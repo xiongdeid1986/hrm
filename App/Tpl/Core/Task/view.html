@@ -1,0 +1,143 @@
+<include file="Public:header" />
+{:W('Navigation')}
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">任务详情</div>
+		<div class="row-table-body">
+			<form class="form-horizontal " action="{:U('core/task/edit')}" method="post">
+				<input type="hidden" name="task_id" value="{$task.task_id}"/>
+				<p class="form-title">
+					任务详情 &nbsp;&nbsp; 
+					<a href="{:U('core/task/edit','id='.$task['task_id'])}" class="pull-right btn btn-primary btn-xs">编辑</a>  
+					<a href="javascript:void(0);" id="add_task_log">添加任务日志</a>&nbsp;&nbsp;
+					<a href="javascript:history.go(-1);">返回</a>  
+				</p>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">任务主题</label>
+					<div class="col-sm-3">{$task.name}</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">创建人</label>
+					<div class="col-sm-3">{$task.creator_user_name}</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">主要执行人</label>
+					<div class="col-sm-3">{$task.executor_name}</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">协同执行人</label>
+					<div class="col-sm-3">{$task.coordinate_name}</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">创建日期</label>
+					<div class="col-sm-3">{$task.create_time|date='Y-m-d H:i',###}</div>
+				</div><div class="form-group">
+					<label for="name" class="col-sm-2 control-label">开始日期</label>
+					<div class="col-sm-3">{$task.start_time|date='Y-m-d H:i',###}</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">截止日期</label>
+					<div class="col-sm-3">{$task.end_time|date='Y-m-d H:i',###}</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">任务状态</label>
+					<div class="col-sm-3">{$task.status}</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">内容</label>
+					<div class="col-sm-8"><pre style="min-height:150px;">{$task.content}</pre></div>
+				</div>
+			</form>
+			<p class="row-table-title">任务日志</p>
+			<table class="table" style="margin-bottom:0px;">
+				<thead>
+					<tr>
+						<th>标题</th>
+						<th>创建人</th>
+						<th>创建时间</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<if condition="empty($task_log)">
+						<tr>
+							<td colspan="4">--- 暂无数据 ---</td>
+						</tr>
+					<else />
+						<volist name="task_log" id="vo">
+						<tr>
+							<td><a href="javascript:void(0);" class="view_taskLogDialog" rel="{$vo.task_log_id}">{$vo.title}</a></td>
+							<td>{$vo.creator_user_name}</td>
+							<td>{$vo.create_time|date='Y-m-d H:i',###}</td>
+							<td>
+								<a href="javascript:void(0);" class="edit_taskLogDialog" rel="{$vo.task_log_id}">编辑</a>&nbsp;|&nbsp;
+								<a href="javascript:void(0);" class="delete_taskLog" rel="{$vo.task_log_id}">删除</a>
+							</td>
+						</tr>
+						</volist>
+					</if>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td colspan="4" align="center">{$page}<div class="clear"></div></td>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script>
+$(function(){
+	/**
+	 * 添加任务日志
+	 **/
+	$('#add_task_log').click(function(){
+		<if condition="'退还' eq $task['status']" >
+			alert('任务已退还，无法添加任务日志！');
+		<else />
+			$('#alert').modal({
+				show:true,
+				remote:'{:U("core/task/addTaskLogDialog","task_id=$task[task_id]")}'
+			});
+		</if>
+	});
+	
+	/**
+	 * 显示任务日志
+	 **/
+	$('.view_taskLogDialog').click(function(){
+		var task_log_id = $(this).attr('rel');
+		$('#alert').modal({
+			backdrop:true,
+			keyboard:true,
+			show:true,
+			remote:'{:U("core/task/viewTaskLogDialog","id=")}'+task_log_id
+		});
+	});
+	
+	/**
+	 * 编辑任务日志
+	 **/
+	$('.edit_taskLogDialog').click(function(){
+		var task_log_id = $(this).attr('rel');
+		$('#alert').modal({
+			show:true,
+			remote:'{:U("core/task/editTaskLogDialog","id=")}'+task_log_id
+		});
+	});
+	
+	/**
+	 * 任务日志删除确认
+	 **/
+	$('.delete_taskLog').click(function(){
+		if(confirm('确定要删除任务日志么？')){
+			var task_log_id = $(this).attr('rel');
+			location.href = '{:U("core/task/deleteLog","id=")}'+task_log_id+'&task_id='+{$task.task_id};
+		}
+		return false;
+	});
+});
+</script>
+<include file="Public:alert" />
+<include file="Public:footer" />

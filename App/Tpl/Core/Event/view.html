@@ -1,0 +1,29 @@
+<include file="Public:header" />
+{:W('Navigation')}
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">日程</div>
+		<div class="row-table-body">
+			<p class="form-title">
+				<a class="pull-right btn btn-primary btn-xs" href="{:U('core/event/index')}">全部日程</a>日程详情
+			</p>
+			<table class="table">
+				<thead>
+					<tr>
+						<th colspan="2"><a class="pull-right btn btn-primary btn-xs" href="{:U('core/event/edit','id='.$info['event_id'])}">编辑</a>{$info.title}</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr><td>负责人：{$info.user_name}</td><td>地点:{$info.address}</td></tr>
+					<tr><td>开始时间：{$info.start_time|date='Y-m-d H:i:s',###}</td><td>开始时间：{$info.end_time|date='Y-m-d H:i:s',###}</td></tr>
+					<tr><td colspan="2"><pre>{$info.content}
+				</pre>
+				<div class="clear"></div></td></tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<include file="Public:alert" />
+<include file="Public:footer" />

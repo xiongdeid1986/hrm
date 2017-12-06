@@ -1,0 +1,22 @@
+<div class="row-table">
+	<div class="row-table-title"><a href="javascript:void(0);" class="close text-hide">移除</a><a href="javascript:void(0);" class="close edit text-hide ">编辑</a>未读信息</div>
+	<div class="row-table-body">
+		<div class="clear"></div>
+		<table class="table">
+			<tbody>
+				<tr>
+					<th>标题</th>
+					<th>发件人</th>
+					<th>日期</th>
+				</tr>
+				<volist name="message_list" id="vo">
+				<tr>
+					<td><a href="{:U('core/message/view','id='.$vo['message_id'])}">{$vo.title}</a></td>
+					<td>{$vo.name}</td>
+					<td>{$vo.send_time|date="Y-m-d",###}</td>
+				</tr>
+				</volist>
+			</tbody>
+		</table>
+	</div>
+</div>

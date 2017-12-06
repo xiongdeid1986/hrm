@@ -1,0 +1,107 @@
+<include file="Core:Public:header" />
+{:W('Navigation')}
+<script src="__PUBLIC__/js/datepicker/WdatePicker.js"></script>
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">添加加班</div>
+		<div class="row-table-body">
+			<form class="form-horizontal " action="{:U('hrm/overtime/add')}" method="post">
+				<p class="form-title">添加加班&nbsp;&nbsp;<a href="javascript:history.go(-1);">返回</a></p>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">加班人</label>
+					<div class="col-sm-3">
+						<input type="hidden" name="user_id" id="dialog_user_id" value="" />
+						<input class="form-control" type="text" name="user_name" id="dialog_user_name"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">类型</label>
+					<div class="col-sm-3">
+						<select class="form-control" name="overtime_category_id">
+							<volist name="category" id="vo">
+								<option value="{$vo.overtime_category_id}">{$vo.name}</option>
+							</volist>
+						</select>
+					</div>
+					<label for="name" class="col-sm-2 control-label">结算方式</label>
+					<div class="col-sm-3">
+						<input type="radio" name="type" value="0" checked="checked">&nbsp;计费加班&nbsp;&nbsp;
+						<input type="radio" name="type" value="1">&nbsp;调休&nbsp;&nbsp;
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">开始时间</label>
+					<div class="col-sm-3">
+						<input class="form-control" type="text" name="start_time" id="d4311" onFocus="WdatePicker({maxDate:$('#d4312').val(),minDate:'%y-%M-%d %H:%m:%s', dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+					</div>
+					<label for="name" class="col-sm-2 control-label">结束时间</label>
+					<div class="col-sm-3">
+						<input class="form-control" type="text" name="end_time" id="d4312" onFocus="WdatePicker({minDate:$('#d4311').val(),maxDate:'2020-10-01',dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">计算结果</label>
+					<div class="col-sm-3">
+						共<span id="time_day">0</span>天<span id="time_hours">0</span>小时
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">填写人</label>
+					<div class="col-sm-3">
+						{$maker_user_name}
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">加班原因</label>
+					<div class="col-sm-8">
+						<textarea name="content" class="col-sm-8 form-control" style="min-height:150px;"></textarea>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label"></label>
+					<div class="col-sm-3">
+						<input name="submit" class="btn btn-primary" type="submit" value="保存"/>&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="button" class="btn" value="取消" onclick="javascript:history.go(-1);"/>
+					</div>
+				</div>
+			</form>	
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script>
+	/**
+	 * 选择员工
+	 **/
+	$('#dialog_user_name').click(function(){
+		$('#alert').modal({
+			show:true,
+			remote:'{:U("core/user/getSubUserDialog","self=1")}'
+		});
+	});
+	/**
+	 * 根据输入计算时差
+	**/
+	$('#d4312').blur(function(){
+		var start_time = $('#d4311').val();
+		var end_time = $('#d4312').val();
+		if('' != start_time && '' != end_time){
+			temp_start_int = (new Date(start_time)).valueOf();
+			temp_start_str = temp_start_int.toString();
+			unix_start_time = temp_start_str.substring(0,10);
+
+			temp_end_int = (new Date(end_time)).valueOf();
+			temp_end_str = temp_end_int.toString();
+			unix_end_time = temp_end_str.substring(0,10);
+			unix_time = unix_end_time - unix_start_time;
+			
+			time_day = parseInt(unix_time/86400);
+			time_hours = parseInt(unix_time/3600);
+			
+			$('#time_day').html(time_day);
+			$('#time_hours').html(time_hours);
+		}
+	});
+</script>
+<include file="Core:Public:alert" />
+<include file="Core:Public:footer" />

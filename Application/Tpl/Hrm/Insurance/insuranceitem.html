@@ -1,0 +1,50 @@
+<include file="Core:Public:header" />
+{:W('Navigation')}
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">社保项目</div>
+		<div class="row-table-body">
+			<p class="form-title">
+				<a class="pull-right btn btn-primary btn-xs" href="{:U('hrm/insurance/addinsuranceitem')}">添加</a>社保项目列表
+			</p>
+			<table class="table" style="margin-bottom:0px;">
+				<form action="{:U('hrm/insurance/deleteinsuranceitem')}" method="post">
+				<tbody>
+					<tr>
+						<th><input type="checkbox" id="check_all"/></th>
+						<th>项目名称</th>
+						<th>类型</th>
+						<th>添加日期</th>
+						<th>操作</th>
+					</tr>
+					<volist name="list" id="vo">
+					<tr>
+						<td><input type="checkbox" name="insurance_item_id[]" value="{$vo.insurance_item_id}" class="check_list"></td>
+						<td>{$vo.name}</td>
+						<td><if condition="$vo.insurance_type == 1">社保<elseif condition="$vo.insurance_type == 2" />公积金</if></td>
+						<td>{$vo.create_time|date="Y-m-d",###}</td>
+						<td><a href="{:U('hrm/insurance/editinsuranceitem','id='.$vo['insurance_item_id'])}">编辑</a>&nbsp;|&nbsp;<a href="{:U('hrm/insurance/deleteinsuranceitem','id='.$vo['insurance_item_id'])}">删除</a></td>
+					</tr>
+					</volist>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td><input type="submit" value="删除" class="btn btn-primary btn-xs"></td>
+						<td colspan="4">{$page}<div class="clear"></div></td>
+					</tr>
+				</tfoot>
+				</form>
+			</table>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+$(function(){
+	$("#check_all").click(function(){
+		$("input[class='check_list']").prop('checked',$(this).prop('checked'));
+	});
+}); 
+</script>
+<include file="Core:Public:alert" />
+<include file="Core:Public:footer" />

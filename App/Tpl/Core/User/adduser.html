@@ -1,0 +1,125 @@
+<include file="Public:header" />
+{:W('Navigation')}
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">添加员工</div>
+		<div class="row-table-body">
+			<form class="form-horizontal " action="{:U('core/user/addUser')}" method="post">
+				<input type="hidden" name="navigation_id" value="{$navigation.navigation_id}"/>
+				<p class="form-title">添加员工&nbsp;&nbsp;<a href="javascript:history.go(-1);">返回</a></p>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label"></label>
+					<div class="col-sm-3">
+						<label class="checkbox-inline"><input type="radio" id="add" name="radio_type" value="add" checked="checked" >快捷添加</label>
+						<label class="checkbox-inline"><input type="radio" id="email" name="radio_type" value="email" >邮箱邀请</label>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">用户名</label>
+					<div class="col-sm-3">
+						<input class="form-control" type="text" name="name" >
+					</div>
+				</div>
+				<div class="form-group" id="password">
+					<label for="name" class="col-sm-2 control-label">密码</label>
+					<div class="col-sm-3">
+						<input class="form-control" type="password" name="password">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="email" class="col-sm-2 control-label">邮箱</label>
+					<div class="col-sm-3">
+						<input class="form-control" type="text" name="email" >
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">用户类别</label>
+					<div class="col-sm-3">
+						<select class="form-control" name="category_id">
+							<option value="">请选择类别</option>
+							<option value="1">管理员</option>
+							<option value="2">员工</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">员工类型</label>
+					<div class="col-sm-3">
+						<select  name="type" class="form-control" >
+							<volist name="type" id="vo">
+							<option value="{$key}" <if condition="$user['type'] == $key">selected = "selected"</if>>{$vo}</option>
+							</volist>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" id="department" class="col-sm-2 control-label">部门</label>
+					<div class="col-sm-3">
+						<select id="department" name="department_id" class="form-control" onchange="changeRoleContent(this.value)">
+							<option value="">请选择部门</option>
+							<volist name="department_list" id="temp">
+								<option value="{$temp.department_id}">{$temp.name}</option>
+							</volist>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name"  class="col-sm-2 control-label">岗位</label>
+					<div class="col-sm-3">
+						<select id="position" name="position_id" class="form-control">
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label"></label>
+					<div class="col-sm-3">
+						<input name="submit" class="btn btn-primary" type="submit" value="添加"/>&nbsp;&nbsp;
+						<input type="button" class="btn" value="取消" onclick="javascript:history.go(-1);"/>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+	$(function(){
+		va = $('input[name="radio_type"]:checked').val();
+		if( va == 'email'){$('#password').hide();}else{$('#password').show();}
+		$('#email').click(
+			function(){
+				$('#password').hide();
+			}
+		);
+		$('#add').click(
+			function(){
+				$('#password').show();
+			}
+		);
+	});
+	function changeRoleContent(department_id){
+		if(department_id == ''){
+			$("#position").html('');
+		}else{
+			$.ajax({
+				type:'get',
+				url:'{:U("hrm/Structure/getDepartmentPosition","id=")}'+department_id,
+				async:false,
+				success:function(data){
+					if(data){
+						options = '';
+						$.each(data, function(k, v){
+							options += '<option value="'+v.position_id+'">'+v.name+'</option>';
+						});
+						$("#position").html(options);
+					}else{
+						$("#position").html('');
+					}
+				},
+				dataType:'json'
+			});	
+		}
+	}
+</script>
+<include file="Public:alert" />
+<include file="Public:footer" />

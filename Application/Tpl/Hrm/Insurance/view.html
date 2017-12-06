@@ -1,0 +1,91 @@
+<include file="Core:Public:header" />
+{:W('Navigation')}
+<script src="__PUBLIC__/js/datepicker/WdatePicker.js"></script>
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">社保投保</div>
+		<div class="row-table-body form-horizontal">
+			<p class="form-title">
+				<a class="pull-right btn btn-primary btn-xs" href="{:U('hrm/insurance/index')}" style="margin-left:10px;">投保员工列表</a>
+				<a class="pull-right btn btn-primary btn-xs" href="{:U('hrm/insurance/edit','id='.$info['insurance_id'])}">编辑</a>
+				编辑社保信息&nbsp;&nbsp;
+				<a href="javascript:history.go(-1);">返回</a>
+			</p>
+			<div class="form-group">
+				<label for="to_name" class="col-sm-2 control-label">姓名</label>
+				<div class="col-sm-3">
+					{$info.name}
+				</div>
+				<label for="id_num" class="col-sm-2 control-label">身份证号</label>
+				<div class="col-sm-3">
+					{$info.id_num}
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="tbno" class="col-sm-2 control-label">社保号</label>
+				<div class="col-sm-3">
+					{$info.tbno}
+				</div>
+				<label for="tbtime" class="col-sm-2 control-label">参保日期</label>
+				<div class="col-sm-3">
+					{$info.tbtime|date='Y-m-d',###}
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="accounts_status" class="col-sm-2 control-label">户口性质</label>
+				<div class="col-sm-3">
+					<if condition="$info['accounts_status'] == 1">
+					非农
+					<elseif condition="$info['accounts_status'] == 2" />
+					农业
+					</if>
+				</div>
+				<label for="ygsf" class="col-sm-2 control-label">员工身份</label>
+				<div class="col-sm-3">
+					<if condition="$info['ygsf'] == 1">
+					农民
+					<elseif condition="$info['ygsf'] == 2" />
+					工人
+					<elseif condition="$info['ygsf'] == 3" />
+					干部
+					</if>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="insurance_address" class="col-sm-2 control-label">社保代付地</label>
+				<div class="col-sm-3">
+					{$info.insurance_address}
+				</div>
+				<label for="fund_address" class="col-sm-2 control-label">公积金代付地</label>
+				<div class="col-sm-3">
+					{$info.fund_address}
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="suit_id" class="col-sm-2 control-label">社保套帐</label>
+				<div class="col-sm-3">
+					{$insurancesuit[$info['suit_id']][name]}
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="content" class="col-sm-2 control-label">备注</label>
+				<div class="col-sm-7">
+					<pre>{$info.content}</pre><div class="clear"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+$(function(){
+	$('#to_name').click(function(){
+		$('#alert').modal({
+			show:true,
+			remote:'/index.php?g=core&m=user&a=getuserrindex'
+		});
+	});
+});
+</script>
+<include file="Core:Public:alert" />
+<include file="Core:Public:footer" />

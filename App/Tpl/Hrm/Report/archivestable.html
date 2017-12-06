@@ -1,0 +1,14 @@
+<table class="table table-bordered table-striped">
+	<tr>
+		<volist name="table_header" id="vo">
+		<th>{$vo}</th>
+		</volist>
+	</tr>
+	<volist name="department" id="v">
+		<tr>
+			<foreach name="table_header" item="o" key="d">
+			<td><if condition="$d == 0">{$v.name}<else/>{$data[$v['department_id']][$d]|default="0"}</if></td>
+			</foreach>
+		</tr>
+	</volist>
+</table>

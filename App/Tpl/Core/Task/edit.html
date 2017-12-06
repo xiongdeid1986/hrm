@@ -1,0 +1,168 @@
+<include file="Public:header" />
+{:W('Navigation')}
+<script src="__PUBLIC__/js/datepicker/WdatePicker.js"></script>
+<script charset="utf-8" src="__PUBLIC__/js/editor/kindeditor.js"></script>
+<script charset="utf-8" src="__PUBLIC__/js/editor/lang/zh_CN.js"></script>
+<script>
+	KindEditor.ready(function(K) {
+			window.editor = K.create('#content',{
+			uploadJson:"{:U('core/file/editor')}"
+		});
+	});
+</script>
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">编辑任务</div>
+		<div class="row-table-body">
+			<form class="form-horizontal " action="{:U('core/task/edit')}" method="post">
+				<p class="form-title">编辑任务&nbsp;&nbsp;<a href="javascript:history.go(-1);">返回</a></p>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">任务主题</label>
+					<div class="col-sm-3">
+						<input type="hidden" name="id" value="{$task.task_id}"/>
+						<input class="form-control" type="text" name="name" value="{$task.name}">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">创建人</label>
+					<div class="col-sm-3">
+						<input class="form-control" type="text" readonly="true" name="creator_user_name" value="{$task.creator_user_name}">
+					</div>	
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">主要执行人</label>
+					<div class="col-sm-3">
+						<!-- 创建人、管理员可以修改“主要执行人” -->
+						<if condition="session('user_id') eq $task['creator_user_id'] or session('?admin')">
+							<input class="form-control" type="hidden" name="executor_id" id="executor_id" value="{$task.executor_id}"/>
+							<input class="form-control" type="text" readonly="true" name="executor_name" id="executor_name" value="{$task.executor_name}">
+						<else />
+							<input class="form-control" type="hidden" name="executor_id" id="executor_id" value="{$task.executor_id}"/>
+							<input class="form-control" type="text" readonly="true" name="executor_name" id="executor_name"  disabled="disabled" value="{$task.executor_name}">
+						</if>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">协同执行人</label>
+					<div class="col-sm-3">
+						<!-- 创建人、主要执行人、管理员可以修改“协同执行人” -->
+						<if condition="session('user_id') eq $task['creator_user_id'] or session('user_id') eq $task['executor_id'] or session('?admin')">
+							<input class="form-control" type="hidden" name="coordinate_ids" id="coordinate_ids" value="{$task.coordinate_ids}"/>
+							<input class="form-control" type="text" readonly="true" name="coordinate_name" id="coordinate_name" value="{$task.coordinate_name}"/>
+						<else />
+							<input class="form-control" type="hidden" name="coordinate_ids" id="coordinate_ids" value="{$task.coordinate_ids}"/>
+							<input class="form-control" type="text" readonly="true" name="coordinate_name" id="coordinate_name" disabled="disabled" value="{$task.coordinate_name}"/>
+						</if>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">任务状态</label>
+					<div class="col-sm-3">
+						<!-- 创建人、主要执行人、管理员可以修改“任务状态” -->
+						<if condition="session('user_id') eq $task['creator_user_id'] or session('user_id') eq $task['executor_id'] or session('?admin')">
+							<select name="status" class="form-control" id="select_status">
+								<option value="未开始" <if condition="'未开始' eq $task['status']">selected="selected"</if>>未开始</option>
+								<option value="进行中" <if condition="'进行中' eq $task['status']">selected="selected"</if>>进行中</option>
+								<option value="已处理" <if condition="'已处理' eq $task['status']">selected="selected"</if>>已处理</option>
+								<option value="退还" <if condition="'退还' eq $task['status']">selected="selected"</if>>退还</option>
+							</select>
+						<else />
+							<select name="status" class="form-control">
+								<option value="{$task.status}" selected="selected">{$task.status}</option>
+							</select>
+						</if>
+					</div>
+					<label for="name" class="col-sm-2 control-label">任务等级</label>
+					<div class="col-sm-3">
+						<!-- 创建人、主要执行人、管理员可以修改“任务状态” -->
+						<if condition="session('user_id') eq $task['creator_user_id'] or session('?admin')">
+							<select name="level" class="form-control">
+								<option value="1" <if condition="$task['level'] eq 1">selected="selected"</if>>普通</option>
+								<option value="2" <if condition="$task['level'] eq 2">selected="selected"</if>>紧急</option>
+								<option value="3" <if condition="$task['level'] eq 3">selected="selected"</if>>闲时处理</option>
+							</select>
+						<else />
+							<select name="level" class="form-control">
+								<option value="$task['level']" selected="selected">
+									<if condition="$task['level'] eq 1">普通<elseif condition="$task['level'] eq 2" />紧急<else />闲时处理</if>
+								</option>
+							</select>
+						</if>	
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">开始日期</label>
+					<div class="col-sm-3">
+						<input class="form-control" type="text" name="start_time" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})" value="{$task.start_time|date='Y-m-d H:i',###}"/>
+					</div>
+					<label for="name" class="col-sm-2 control-label">截止日期</label>
+					<div class="col-sm-3">
+						<input class="form-control" type="text" name="end_time" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})" value="{$task.end_time|date='Y-m-d H:i',###}"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">任务内容</label>
+					<div class="col-sm-8">
+						<textarea id="content" name="content" style="width:800px;height:300px;">{$task.content}</textarea>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label"></label>
+					<div class="col-sm-3">
+						<input name="submit" class="btn btn-primary" type="submit" value="保存"/>&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="button" class="btn" value="取消" onclick="javascript:history.go(-1);"/>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+	/**
+	 * 加载主要执行人名称弹出层
+	**/
+	$('#executor_name').click(function(){
+		$('#alert').modal({
+			show:true,
+			remote:'{:U("core/user/getSubUserDialog","self=1")}'
+		});
+	});
+	
+	/**
+	 * 加载协同执行人名称弹出层
+	**/
+	$('#coordinate_name').click(function(){
+		var executor_name = $('#executor_name').val();
+		if('' == executor_name){
+			alert('请先选择主要执行人！');
+		}else{
+			$('#alert').modal({
+				show:true,
+				remote:'{:U("core/user/getSubUserCBDialog")}'
+			});
+		}
+	});
+	
+	/**
+	 * 根据选择状态判断是否显示退还申请和驳回原因
+	**/
+	$('#select_status').change(function(){
+		var select_option_value = $("#select_status option:selected").val();
+		if('退还' == select_option_value && '退还' != '{$task.status}'){
+			$('#alert').modal({
+				show:true,
+				remote:'{:U("core/task/refundingApplicationDialog","task_id=$task[task_id]")}'
+			});
+		}else{
+			if('退还' != select_option_value && '退还' == '{$task.status}'){
+				$('#alert').modal({
+					show:true,
+					remote:'{:U("core/task/sendBackDialog","task_id=$task[task_id]")}'
+				});
+			}
+		}
+	});
+</script>
+<include file="Public:alert" />
+<include file="Public:footer" />

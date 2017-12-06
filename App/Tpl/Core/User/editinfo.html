@@ -1,0 +1,155 @@
+<include file="Public:header" />
+{:W('Navigation')}
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">个人资料</div>
+		<div class="row-table-body">
+			<form class="form-horizontal " action="{:U('core/user/editinfo')}" method="post">
+				<input type="hidden" name="user_id" value="{$user['user_id']}"/>
+				<p class="form-title">基本信息&nbsp;&nbsp;<a href="javascript:history.go(-1);">返回</a></p>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">用户名</label>
+					<div class="col-sm-3">
+						<if condition="session('?admin')"><input type="text" name="name" class="form-control" value="{$user['name']}"><else />{$user.name}</if>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">用户类别</label>
+					<div class="col-sm-3">
+						<if condition="session('?admin')">
+						<select class="form-control" name="category_id" id="category_id">
+							<option value="0" <if condition="0 eq $user['category_id']">selected = "selected"</if>>员工</option>
+							<option value="1" <if condition="1 eq $user['category_id']">selected = "selected"</if>>管理员</option>
+						</select>
+						<else />
+							<if condition="$user['category_id'] == 1">管理员<else />员工</if>
+						</if>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">部门</label>
+					<div class="col-sm-3">
+						<select id="department" name="department_id" class="form-control" onchange="changeRoleContent()">
+							<option value="">请选择部门</option>
+							<volist name="department_list" id="temp">
+								<option value="{$temp.department_id}" <if condition="$user['department_id'] == $temp['department_id']">selected = "selected"</if>>{$temp.name}</option>
+							</volist>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">岗位</label>
+					<div class="col-sm-3">
+						<select id="position_id" name="position_id" class="form-control" >
+							<option value="">请选择岗位</option>
+							<volist name="position_list" id="temp">
+								<option value="{$temp.position_id}" <if condition="$user['position_id'] == $temp['position_id']">selected = "selected"</if>>{$temp.name}</option>
+							</volist>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">员工状态</label>
+					<div class="col-sm-3">
+						<select  name="status" class="form-control" >
+							<volist name="status" id="vo">
+							<option value="{$key}" <if condition="$user['status'] == $key">selected = "selected"</if>>{$vo}</option>
+							</volist>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">员工类型</label>
+					<div class="col-sm-3">
+						<select  name="type" class="form-control" >
+							<volist name="type" id="vo">
+							<option value="{$key}" <if condition="$user['type'] == $key">selected = "selected"</if>>{$vo}</option>
+							</volist>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">工作状态</label>
+					<div class="col-sm-3">
+						<select  name="work_status" class="form-control" >
+							<volist name="work_status" id="vo">
+							<option value="{$key}" <if condition="$user['work_status'] == $key">selected = "selected"</if>>{$vo}</option>
+							</volist>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">性别</label>
+					<div class="col-sm-3">
+						<label class="checkbox-inline"><input type="radio"  name="sex" value="1" <if condition="$user['sex'] eq 1">checked="checked"</if>/>男</label>
+						<label class="checkbox-inline"><input type="radio"  name="sex" value="2" <if condition="$user['sex'] eq 2">checked="checked"</if>/>女</label>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">邮箱</label>
+					<div class="col-sm-3">
+						<input class="form-control" name="email" type="text" value="{$user.email}">
+					</div>
+				</div><div class="form-group">
+					<label class="col-sm-2 control-label">手机</label>
+					<div class="col-sm-3">
+						<input class="form-control" name="telephone" type="text" value="{$user.telephone}">
+					</div>
+				</div><div class="form-group">
+					<label class="col-sm-2 control-label">联系地址</label>
+					<div class="col-sm-3">
+						<textarea name="address" class="form-control" >{$user.address}</textarea>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label"></label>
+					<div class="col-sm-3">
+						<input name="submit" class="btn btn-primary" type="submit" value="保存"/>&nbsp;&nbsp;<input type="button" class="btn" value="取消" onclick="javascript:history.go(-1);"/>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+	$(function(){
+		$('#position_id').click(
+			function(){
+				department_id = $('#department').val();
+				if(department_id == ''){
+					alert('请先选择部门!');
+				}
+			}
+		);
+		
+		$("#department option[value='{$user['department_id']}']").prop("selected", true);
+		$("#position_id option[value='{$user['position_id']}']").prop("selected", true);
+	});
+	function changeRoleContent(){
+		department_id = $('#department').val();
+		if(department_id == ''){
+			$("#position_id").html('');
+		}else{
+			$.ajax({
+				type:'get',
+				url:'{:U("hrm/structure/getDepartmentPosition","id=")}'+department_id,
+				async:false,
+				success:function(data){
+					if(data){
+						options = '';
+						$.each(data, function(k, v){
+							options += '<option value="'+v.position_id+'">'+v.name+'</option>';
+						});
+						$("#position_id").html(options);
+					}else{
+						$("#position_id").html('');
+					}
+				},
+				dataType:'json'
+			});		
+		}
+	}
+</script>
+<include file="Public:alert" />
+<include file="Public:footer" />

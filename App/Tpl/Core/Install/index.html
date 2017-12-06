@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>安装悟空HRM</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="悟空HRM">
+<link href="__PUBLIC__/css/bootstrap.css" rel="stylesheet">
+<style type="text/css">
+  body {
+	padding-top: 20px;
+	padding-bottom: 20px;
+	background-color: #f5f5f5;
+  }
+
+  .install {
+	max-width: 600px;
+	padding: 19px 29px 29px;
+	margin: 0 auto 20px;
+	background-color: #fff;
+	border: 1px solid #e5e5e5;
+	-webkit-border-radius: 5px;
+	   -moz-border-radius: 5px;
+			border-radius: 5px;
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	   -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+			box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  }
+  .install input[type="text"],
+  .install input[type="password"] {
+	font-size: 16px;
+	height: auto;
+	padding: 7px 9px;
+	margin:0;
+  }
+
+  .wukong {
+	padding-top:10px;
+	border-top:1px solid #e5e5e5;		
+  }
+  .table {
+	margin-bottom:0px;
+  }
+  .table td {border:0;}
+  .table td label{border:0;line-height:34px;}
+  .table td span{border:0;line-height:34px;color:#999999;}
+  .span9{
+	font-weight:700;
+	padding-top:10px;
+  }
+</style>
+
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+</head>
+
+<body>
+
+<div class="container">
+	<div class="install">
+		<h3>欢迎安装悟空HRM！</h3>			
+		<empty name="errors">			
+		<volist name="warnings" id="warning">
+		<div class="alert alert-warning">
+			<button type="button" class="close" data-dismiss="alert">×</button>
+			{$warning}
+		</div>
+		</volist>
+		<form action="" method="post">	
+			<table class="table table-hover" width="95%" border="0" cellspacing="1" cellpadding="0">
+				<tr>
+					<td width=100><label>数据库主机</label></td>
+					<td width=230><input type="text" name="DB_HOST" class="form-control" value="localhost" /></td>
+					<td><span>一般为localhost</span></td>
+				</tr>
+				<tr>
+					<td><label>端口</label></td>
+					<td><input type="text" name="DB_PORT" class="form-control" value="3306" /></td>
+					<td><span>一般为3306</span></td>
+				</tr>
+				<tr>
+					<td><label>数据库名</label></td>
+					<td><input type="text" name="DB_NAME" class="form-control" placeholder="数据库名"/></td>
+					<td><span>将悟空HRM安装到哪个数据库</span></td>
+				</tr>
+				<tr>
+					<td><label>用户名</label></td>
+					<td><input type="text" name="DB_USER" class="form-control" placeholder="用户名"/></td>
+					<td><span>MySQL用户名</span></td>
+				</tr>
+				<tr>
+					<td><label>密码</label></td>
+					<td><input type="text" name="DB_PWD" class="form-control" placeholder="密码"/></td>
+					<td><span>MySQL用户的密码</span></td>
+				</tr>
+				<tr>
+					<td><label>表前缀</label></td>
+					<td><input type="text" name="DB_PREFIX" class="form-control" value="hr_" placeholder="hr_"/></td>
+					<td><span></span></td>
+				</tr>
+				<tr>
+					<td><label>管理员</label></td>
+					<td><input type="text" name="name" class="form-control" placeholder="管理员"/></td>
+					<td><span>悟空HRM的系统管理员</span></td>
+				</tr>
+				<tr>
+					<td><label>密码</label></td>
+					<td><input type="text" name="password" class="form-control" placeholder="密码"/></td>
+					<td><span>系统管理员密码</span></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><button class="btn btn-primary" name="submit" type="submit" value="install">安装</button></td>
+					<td></td>
+				</tr>
+			</table>
+		</form>
+		<else />
+		<volist name="errors" id="error">
+		<div class="alert alert-error">
+			<button type="button" class="close" data-dismiss="alert">×</button>
+			{$error}
+		</div>
+		</volist>
+		</empty>	  
+		<div class="row-fluid wukong">
+			<div class="span3"><img src="__PUBLIC__/img/logo.gif" alt="悟空HRM"/></div>
+			<div class="span9">
+				<p>悟空HRM &copy; 郑州卡卡罗特软件科技有限公司 2013 -- {:date('Y')}</p>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

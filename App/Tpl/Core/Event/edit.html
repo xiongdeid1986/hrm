@@ -1,0 +1,71 @@
+<include file="Public:header" />
+{:W('Navigation')}
+<script src="__PUBLIC__/js/datepicker/WdatePicker.js" type="text/javascript"></script>
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">日程</div>
+		<div class="row-table-body">
+			<p class="form-title"><a class="pull-right btn btn-primary btn-xs" href="{:U('core/event/index')}">日程列表</a>编辑日程</p>
+			<form class="form-horizontal" action="{:U('core/event/edit')}" method="post" >
+				<input type="hidden" name="event_id" value="{$info.event_id}" />
+				<div class="form-group">
+					<label class="col-sm-2 control-label" for="title">主题</label>
+					<div class="col-sm-3">
+						<input id="title" class="form-control" type="text" name="title" value="{$info.title}" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label" for="user_name">负责人</label>
+					<div class="col-sm-3">
+						<input id="user_name" class="form-control" type="text" name="executor_name" value="{$info.user_name}" />
+						<input id="user_id" type="hidden" name="executor_id" value="{$info.user_id}" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label" for="address">地址</label>
+					<div class="col-sm-3">
+						<input id="address" type="text" class="form-control" name="address" value="{$info.address}" >
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label" for="start_time">开始时间</label>
+					<div class="col-sm-3">
+						<input id="start_time" type="text" class="form-control" name="start_time" value="{:date('Y-m-d H:i:s',$info[start_time])}" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" >
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label" for="end_time">结束时间</label>
+					<div class="col-sm-3">
+						<input id="end_time" class="form-control" type="text" name="end_time" value="{:date('Y-m-d H:i:s',$info[end_time])}" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" >
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label" for="content">描述</label>
+					<div class="col-sm-5">
+						<textarea class="form-control" id="content" rows="4" name="content">{$info.content}</textarea>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label" for="sms"></label>
+					<div class="col-sm-3">
+						<input type="submit" class="btn btn-primary" value="保存" />
+					</div>
+				</div>
+			</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+	$(function(){
+		$('#user_name').click(function(){
+			$('#alert').modal({
+				show:true,
+				remote:'{:u("core/user/getSubUserDialog","self=1")}'
+			});
+		});
+	});
+</script>
+<include file="Public:alert" />
+<include file="Public:footer" />

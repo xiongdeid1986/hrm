@@ -1,0 +1,42 @@
+<include file="Core:Public:header" />
+{:W('Navigation')}
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">薪资项目</div>
+		<div class="row-table-body">
+			<p class="form-title">
+				<a class="pull-right btn btn-primary btn-xs" href="{:U('hrm/salary/salaryitem')}">项目列表</a>添加薪资项目
+			</p>
+			<form class="form-horizontal" action="{:U('hrm/salary/addsalaryitem')}" method="post">
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">项目名称</label>
+					<div class="col-sm-3">
+						<input class="form-control" type="text" name="name" id="name" value="" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="content" class="col-sm-2 control-label">项目说明</label>
+					<div class="col-sm-5">
+						<textarea class="form-control" rows="5" name="content" id="content"></textarea>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="sort_id" class="col-sm-2 control-label">排序</label>
+					<div class="col-sm-1">
+						<input class="form-control" type="text" name="sort_id" id="sort_id" value="0" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label"></label>
+					<div class="col-sm-3">
+						<input class="btn btn-primary" type="submit" value="保存"/>&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="button" class="btn" value="取消" onclick="javascript:history.go(-1);"/>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<include file="Core:Public:alert" />
+<include file="Core:Public:footer" />

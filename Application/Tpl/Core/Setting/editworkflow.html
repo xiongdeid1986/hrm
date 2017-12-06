@@ -1,0 +1,62 @@
+<include file="Public:header" />
+{:W('Navigation')}
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">流程控制</div>
+		<div class="row-table-body workflowbox">
+			<p class="form-title">编辑流程</p>
+			<table class="table table-bordered" style="margin-bottom:0px;">
+				<tr><td align="center">开始</td></tr>
+				<tr>
+					<td align="center">
+						<select class="type" name="type0">
+							<option>--选择操作--</option>
+							<option value="1">审批</option>
+							<option value="2">判断</option>
+							<option value="3">通知</option>
+						</select>
+					</td>
+				</tr>
+				<tr><td align="center">结束</td></tr>
+			</table>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+$(function(){
+	$('.workflowbox').on('change','.type',function(){
+		if($(this).nextAll().length != 0){
+			$(this).nextAll().remove();
+		}
+		if($(this).val() == 1){
+			$(this).after('<select class="position" name="position0"><option value="0">直接上级领导</option><option value="1">总经理</option><option value="2">项目经理</option><option value="4">软件开发</option></select><table class="table table-bordered" style="margin-bottom:0px;"><tr><td align="center" width="50%">通过</td><td align="center">不通过</td></tr><tr><td align="center"><select class="type" name="type0"><option>--选择操作--</option><option value="1">审批</option><option value="2">判断</option><option value="3">通知</option></select></td><td align="center"><select class="type" name="type0"><option>--选择操作--</option><option value="1">审批</option><option value="2">判断</option><option value="3">通知</option></select></td></tr></table>');
+		}
+		if($(this).val() == 2){
+			$(this).after('<select class="is" name="is0"><option>--选择条件--</option><option value="1">时长</option><option value="2">开始时间</option></select><table class="table table-bordered" style="margin-bottom:0px;"><tr><td width="50%" align="center">通过</td><td align="center">不通过</td></tr><tr><td align="center"><select class="type" name="type0"><option>--选择操作--</option><option value="1">审批</option><option value="2">判断</option><option value="3">通知</option></select></td><td align="center"><select class="type" name="type0"><option>--选择操作--</option><option value="1">审批</option><option value="2">判断</option><option value="3">通知</option></select></td></tr></table></td></tr>');
+		}
+		if($(this).val() == 3){
+			$(this).after('<select class="position" name="position0"><option value="0">发起人</option><option value="1">总经理</option><option value="2">项目经理</option><option value="4">软件开发</option></select>');
+		}
+	});
+	$('.workflowbox').on('change','.position',function(){
+		if($(this).next().attr('class') != 'user' && $(this).val() != 0){
+			$(this).after('<select class="user" name="user0"><option>--选择员工--</option><option value="1">hrms</option><option value="2">史俊涛</option><option value="3">许浩光</option></select>');
+		}
+		if($(this).next().attr('class') == 'user' && $(this).val() == 0){
+			$(this).next().remove();
+		}
+	});
+	$('.workflowbox').on('change','.is',function(){
+		if($(this).next().attr('class') != 'value' && $(this).val() != 0){
+			
+			$(this).after('<select class="value" name="user0"><option>--选择条件--</option><option value="eq">等于</option><option value="gt">大于</option><option value="lt">小于</option><option value="neq">不等于</option></select><input type="text" size="5"/>');
+		}
+		if($(this).next().attr('class') == 'value' && $(this).val() == 0){
+			$(this).next().remove();
+		}
+	});
+})
+</script>
+<include file="Public:alert" />
+<include file="Public:footer" />

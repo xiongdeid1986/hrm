@@ -1,0 +1,78 @@
+<include file="Public:header" />
+{:W('Navigation')}
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">菜单设置</div>
+		<div class="row-table-body">
+			<p class="form-title">菜单设置<a href="{:U('core/navigation/add')}" class="pull-right btn btn-primary btn-xs" >添加</a></p>
+			<form class="form-horizontal " id="form1"  method="post">
+			<table class="table">
+				<if condition="empty($navigation)">
+					<tr><td>---暂无数据---</td></tr>
+				<else />
+				<tbody>
+					<tr>
+						<th width="5%"><input type="checkbox" name="check_all" id="check_all" /></th>
+						<th width="10%">排序</th>
+						<th width="30%">名称</th>
+						<th width="30%">描述</th>
+						<th width="10%">默认显示</th>
+						<th width="10%">操作</th>
+					</tr>
+				<volist name="navigation" id="vo">
+					<tr>
+						<td><input type="checkbox" name="id[]" class="check_list" value="{$vo.navigation_id}"/></td>
+						<td><input type="text" name="sort[{$vo.navigation_id}]" value="{$vo.sort_id}" style="width:30px;text-align:center;"></td>
+						<td><a href="{:U('core/navigation/edit','id='.$vo['navigation_id'])}">{$vo.name}</a></td>
+						<td>{$vo.description}</td>
+						<td><a href="{:U($vo['control']['g'].'/'.$vo['control']['m'].'/'.$vo['control']['a'])}" target="blank">{$vo.control.name}</a></td>
+						<td>
+							<a href="{:U('core/navigation/edit','id='.$vo['navigation_id'])}">编辑</a>&nbsp;|&nbsp;
+							<a href="{:U('core/navigation/delete','id='.$vo['navigation_id'])}">删除</a>
+						</td>
+					</tr>
+				</volist>
+				<tfoot>
+					<tr>
+						<td><button class="btn btn-primary btn-xs"  id="delete">删除</button></td>
+						<td><button class="btn btn-primary btn-xs"  id="sort">排序</button></td>
+						<td colspan="4">&nbsp;</td>
+					</tr>
+				</tfoot>
+				</if>
+				</tbody>
+			</table>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+	/**
+	 * 全选
+	 **/
+	$("#check_all").click(function(){
+		$("input[class='check_list']").prop('checked',$(this).prop('checked'));
+	});
+	
+	/**
+	 * 批量删除
+	 **/
+	$("#delete").click(function(){
+		if(confirm('确定要删除吗？')){
+			$("#form1").attr("action","{:U('core/navigation/delete')}");
+			$("#form1").submit();
+		}
+	});
+	
+	/**
+	 *
+	 * 排序
+	 **/
+	$("#sort").click(function(){
+		$("#form1").attr("action","{:U('core/navigation/sorts')}");
+		$("#form1").submit();
+	});
+</script>
+<include file="Public:alert" />
+<include file="Public:footer" />

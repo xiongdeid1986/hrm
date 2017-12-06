@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="ro-RO">
+<head profile="http://gmpg.org/xfn/11">
+<title>系统错误提示</title>
+<meta charset="utf-8"/>
+<meta http-equiv="Content-Language" content="ro"/>
+<meta name="robots" content="all,index,follow"/>
+<meta http-equiv="X-UA-Compatible" content="IE=8">
+<link rel="stylesheet" type="text/css" media="all" href="http://<?php echo $_SERVER['HTTP_HOST'];?>/Public/css/404/style.css" />
+<link rel="stylesheet" type="text/css" media="all" href="http://<?php echo $_SERVER['HTTP_HOST'];?>/Public/css/404/backgrounds.css" />
+<link rel="stylesheet" type="text/css" media="all" href="http://<?php echo $_SERVER['HTTP_HOST'];?>/Public/css/404/themes/blue/css/style.css" />
+<link rel="stylesheet" type="text/css" media="all" href="http://<?php echo $_SERVER['HTTP_HOST'];?>/Public/css/404/themes/green/css/style.css" />
+<link rel="stylesheet" type="text/css" media="all" href="http://<?php echo $_SERVER['HTTP_HOST'];?>/Public/css/404/themes/gray/css/style.css" />
+</head>
+<body>
+
+<div class="wrapper">
+
+	<div class="mainWrapper">
+        <div class="leftHolder">
+        	<div class="logo">ErrorInfo 提示!</div>
+            <div class="errorNumber">
+            <?php if(isset($e['file'])) {?>
+                <b>错误信息</b><br />	
+				<?php echo strip_tags($e['message']);?><br />
+                <b>错误位置</b><br />
+                <?php echo $e['file'] ;?><br />
+				<b>行数(Line)</b>: <?php echo $e['line'];?><br />
+				<b>Trace</b>: <?php echo $e['trace'];?>
+            <?php }?>
+            </div> 
+        </div>
+        <div class="rightHolder">
+            <div class="message"><p>很抱歉，让您看到了这个不友好的界面，您可以尝试通过以下方式解决.</p></div>
+            <div class="robotik"><img style="width: 50px" src="http://<?php echo $_SERVER['HTTP_HOST'];?>/Public/css/404/images/robotik.png" ></div>
+            <div class="tryToMessage">
+                尝试方法:
+                <ul>
+                    <li>1: 清空缓存后，重新访问; <a href="javascript:void(0)"> 查看清空缓存方法</a> .</li>
+                    <li>2: 您可以开启调试模式，查看问题详情 .</li>
+                </ul>
+            </div>
+            <div class="search">
+            <span class="errorSearch">Please fill the search field</span>
+              <div class="searchInput">
+                <input type="text" id="search_term" name="search_term" value="http://<?php echo C("COMPANY_URL");?>" />
+              </div>
+              <div class="searchButton">
+                <input type="submit" onclick="window.open(document.getElementById('search_term').value)" value="Go" />
+              </div>
+            </div>
+          </div>
+
+	</div>
+
+</div>
+
+<div class="wrapper_footer">
+<footer>
+<p class="copy">&copy<?php echo C("COMPANY_NAME");?> &nbsp; 版本号: <?php echo C("VERSION");?> &nbsp; 发布时间: <?php echo C("RELEASE");?> &nbsp; 系统分支: <?php echo C("APP_NAME_HRM");?> .</p>
+</footer>
+</div>
+</body>
+</html>

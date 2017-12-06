@@ -1,0 +1,38 @@
+<div class="row-table">
+	<div class="row-table-title"><a href="javascript:void(0);" class="close text-hide">移除</a><a href="javascript:void(0);" class="close edit text-hide ">编辑</a>公告通知</div>
+	<div class="row-table-body">
+		<if condition="$top_announcement">
+		<table class="table" style="margin-bottom:0px;">
+			<thead>
+				<tr>
+					<th>
+						<img src="__PUBLIC__/img/set_top.gif" />&nbsp;&nbsp;
+						<a href="{:U('core/announcement/view','id='.$top_announcement['announcement_id'])}">
+							<span style="color:#{$top_announcement.color};font-size:14px;">
+								{$top_announcement['title']}
+							</span>
+						</a>
+					</th>
+				</tr>
+			</thead>
+		</table>
+		</if>
+		<div class="clear"></div>
+		<table class="table">
+			<tbody>
+				<tr>
+					<th>标题</th>
+					<th>发布人</th>
+					<th>日期</th>
+				</tr>
+				<volist name="list_announcement" id="vo">
+				<tr>
+					<td><a href="{:U('core/announcement/view','id='.$vo['announcement_id'])}" style="color:#{$vo.color}">{$vo.title}</td>
+					<td>{$vo.creator_user_name}</td>
+					<td>{$vo.create_time|date="Y-m-d",###}</td>
+				</tr>
+				</volist>
+			</tbody>
+		</table>
+	</div>
+</div>

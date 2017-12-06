@@ -1,0 +1,59 @@
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h4 class="modal-title" id="myModalLabel"><b>员工列表</b></h4><span class="unshift-user">温馨提示:姓名标红为未排班人员</span><span></span>
+		</div>
+		<div class="modal-body form-horizontal">
+		<if condition="empty($user)">
+			<div>---暂无数据---</div>
+		<else />
+			<form name="form1" action="{:U('hrm/workingshift/shiftwork')}" method="post">
+				<input type="hidden" name="working_shift_id" value="{$working_shift_id}"/>
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th><input type="checkbox" name="check_all" class="check_all"></th>
+							<th width="14%">姓名</th>
+							<th width="20%">班次</th>
+							<th width="26%">部门-岗位</th>
+							<th>电话</th>
+							<th>邮箱</th>
+						</tr>
+					</thead>
+					<tbody>
+						<volist name="user" id="vo">
+							<tr>
+								<td><input type="checkbox" name="user_id[]" value="{$vo.user_id}" <if condition="$working_shift_id eq $vo['working_shift_id']">checked="checked"</if> /></td>
+								<td>
+									<if condition="'0' eq $vo['working_shift_id']"><span class="color-red">{$vo.name}</span><else />{$vo.name}</if>
+								</td>
+								<td>{$vo.working_shift_name}</td>
+								<td>{$vo.department_name}-{$vo.position_name}</td>
+								<td>{$vo.telephone}</td>
+								<td>{$vo.email}</td>
+							</tr>
+						</volist>
+					</tbody>
+				</table>
+				<div class="modal-footer">
+					<input type="submit" class="btn btn-primary" value="确定" />
+					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+				</div>
+			</form>
+		</if>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	/**
+	 * 全选
+	 *
+	 **/
+	$(function(){
+		$(".check_all").click(function(){
+			$("input[name='user_id[]']").prop('checked', $(this).prop("checked"));
+		});
+	});
+	
+</script>

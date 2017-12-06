@@ -1,0 +1,132 @@
+<include file="Core:Public:header" />
+{:W('Navigation')}
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">班次设置</div>
+		<div class="row-table-body">
+			<p class="form-title">班次设置<a href="{:U('hrm/workingshift/add')}" class="pull-right btn btn-primary btn-xs" >添加</a></p>
+			<form id="search_form" action="" method="get">
+				<input type="hidden" name="g" value="hrm"/>
+				<input type="hidden" name="m" value="workingshift"/>
+				<div class="form-inline" >
+					<div class="form-group">
+						<label for="name">班次名称</label>
+						<input type="text" class="form-control" id="working_shift_name" name="working_shift_name" />
+					</div>&nbsp;&nbsp;
+					<div class="form-group">
+						<label for="name">员工姓名</label>
+						<input type="text" class="form-control" id="search_user_name" name="search_user_name" placeholder="请输入全称..."/>
+					</div>&nbsp;&nbsp;
+					<input type="button" class="btn search_btn" value="搜索" />
+				</div>
+			</form>
+			<if condition="empty($shiftlist)">
+				<div>---暂无数据---</div>
+			<else />
+			<form class="form-horizontal " id="form1"  method="post">
+				<table class="table" style="margin-bottom:0px;">
+					<tbody>
+						<tr>
+							<th><input type="checkbox" name="working_shift_id[]" id="check_all"/></th>
+							<th>班次名称</th>
+							<th>班次类型</th>
+							<th>工作时间</th>
+							<th>工作日</th>
+							<th>操作</th>
+						</tr>
+						<volist name="shiftlist" id="vo">
+						<tr>
+							<td><input type="checkbox" name="id[]" class="check_list" value="{$vo.working_shift_id}" /></td>
+							<td><a href="javascript:void(0);" class="working_shift_user" rel="{$vo.working_shift_id}">{$vo.name}</a></td>
+							<td>{$vo.typename}</td>
+							<td>{$vo.start_time|date='H:i',###}&nbsp;至&nbsp;{$vo.end_time|date='H:i',###}</td>
+							<td>{$vo.working_days_name}</td>
+							<td>
+								<a href="javascript:void(0);" class="shift_work" rel="{$vo.working_shift_id}">添加员工</a>&nbsp;|&nbsp;
+								<a href="{:U('hrm/workingshift/edit','id='.$vo['working_shift_id'])}">编辑</a>&nbsp;|&nbsp;
+								<a href="{:U('hrm/workingshift/delete','id='.$vo['working_shift_id'])}">删除</a>
+							</td>
+						</tr>
+						</volist>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td colspan="6">
+								<input name="submit" class="btn btn-primary btn-xs" type="submit" id="delete" value="删除"/>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="6" align="center">{$page}<div class="clear"></div></td>
+						</tr>
+					</tfoot>
+				</table>
+			</form>
+			</if>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+	/**
+	 * 全选
+	 **/
+	$("#check_all").click(function(){
+		$("input[class='check_list']").prop('checked',$(this).prop('checked'));
+	});
+	
+	/**
+	 * 批量删除
+	 **/
+	$("#delete").click(function(){
+		if(confirm('确定要删除吗？')){
+			$("#form1").attr("action","{:U('hrm/workingshift/delete')}");
+			$("#form1").submit();
+		}
+	});
+	
+	/**
+	 * 选择员工
+	 **/
+	$('.shift_work').click(function(){
+		var working_shift_id = $(this).attr('rel');
+		$('#alert').modal({
+			show:true,
+			remote:'{:U("hrm/workingshift/getUserDialog","working_shift_id")}'+working_shift_id
+		});
+	});
+	
+	/**
+	 * 查看班次中的排版人员
+	 **/
+	$('.working_shift_user').click(function(){
+		var working_shift_id = $(this).attr('rel');
+		$('#alert').modal({
+			show:true,
+			remote:'{:U("hrm/workingshift/workingShiftUserDialog","working_shift_id")}'+working_shift_id
+		});
+	});
+	
+	$('#working_shift_name').prop('value', '{$Think.get.working_shift_name}');
+	$('#search_user_name').prop('value', '{$Think.get.search_user_name}');
+	
+	/**
+	 * 单击提交搜索表单
+	 * 双击清空搜索项
+	 **/
+	$(function(){
+		var TimeFn = null;
+		$('.btn.search_btn').click(function () {
+			clearTimeout(TimeFn);
+			TimeFn = setTimeout(function(){
+				$('#search_form').submit();
+			},300);
+		});
+		
+		$('.btn.search_btn').dblclick(function () {
+			clearTimeout(TimeFn);
+			window.location.href="{:U('hrm/workingshift/index')}";
+		})
+	});
+</script>
+<include file="Core:Public:alert" />
+<include file="Core:Public:footer" />

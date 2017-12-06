@@ -1,0 +1,75 @@
+<include file="Core:Public:header" />
+{:W('Navigation')}
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">社保投保</div>
+		<div class="row-table-body">
+			<p class="form-title">
+				<a class="pull-right btn btn-primary btn-xs" href="{:U('hrm/insurance/add')}">添加</a>社保投保员工列表
+			</p>
+			<form class="form-inline " method="get" action="">
+				<input type="hidden" name="g" value="hrm">
+				<input type="hidden" name="m" value="insurance">
+				<div class="form-group">
+					<label class="control-label" for="to_name">姓名</label>
+					<input id="to_name" class="form-control" type="text" name="user_name" value="{$_GET['user_name']}">
+					<input id="to_user_id" type="hidden" name="user_id" value="{$_GET['user_id']}>
+				</div>
+				<div class="form-group">
+					<label class="control-label" for="to_name">投保号</label>
+					<input id="tbno" class="form-control" type="text" name="tbno" value="{$_GET['tbno']}">
+				</div>
+				<input class="btn btn-primary" type="submit" value="搜索">
+			</form>
+			<form method="post" action="{:U('hrm/insurance/delete')}">
+			<table class="table" style="margin-bottom:0px;">
+				<tbody>
+					<tr>
+						<th><input type="checkbox" id="check_all"></th>
+						<th>姓名</th>
+						<th>投保号</th>
+						<th>身份证号</th>
+						<th>职位</th>
+						<th>参保日期</th>
+						<th>操作</th>
+					</tr>
+					<volist name="list" id="vo">
+					<tr>
+						<td><input type="checkbox" name="insurance_id[]" class="check_list" value="{$vo.insurance_id}"></td>
+						<td>{$vo.name}</td>
+						<td><a href="{:U('hrm/insurance/view','id='.$vo['insurance_id'])}">{$vo.tbno}</a></td>
+						<td>{$vo.id_num}</td>
+						<td>{$vo.department_name} - {$vo.position_name}</td>
+						<td>{$vo.tbtime|date="Y-m-d",###}</td>
+						<td><a href="{:U('hrm/insurance/edit','id='.$vo['insurance_id'])}">编辑</a>&nbsp;|&nbsp;<a href="{:U('hrm/insurance/delete','id='.$vo['insurance_id'])}">删除</a></td>
+					</tr>
+					</volist>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td><input class="btn btn-primary btn-xs" type="submit" value="删除"></td>
+						<td colspan="7">{$page}<div class="clear"></div></td>
+					</tr>
+				</tfoot>
+			</table>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+
+$(function(){
+	$("#check_all").click(function(){
+		$("input[class='check_list']").prop('checked',$(this).prop('checked'));
+	});
+	$('#to_name').click(function(){
+		$('#alert').modal({
+			show:true,
+			remote:"{:U('core/user/getuserrindex')}"
+		});
+	});
+}); 
+</script>
+<include file="Core:Public:alert" />
+<include file="Core:Public:footer" />

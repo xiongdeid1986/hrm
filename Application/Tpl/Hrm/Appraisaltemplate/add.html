@@ -1,0 +1,86 @@
+<include file="Core:Public:header" />
+{:W('Navigation')}
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">添加绩效考核模板</div>
+		<div class="row-table-body">
+			<form class="form-horizontal" action="{:U('hrm/appraisaltemplate/add')}" method="post">
+				<p class="form-title">
+					添加绩效考核模板&nbsp;&nbsp;<a href="javascript:history.go(-1);">返回</a>&nbsp;&nbsp;
+				</p>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">模板名称</label>
+					<div class="col-sm-3">
+						<input class="form-control" type="text" name="name" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">类型</label>
+					<div class="col-sm-3">
+						<select class="form-control" name="category_id">
+							<volist name="template_category" id="vo">
+								<option value="{$vo.category_id}">{$vo.name}</option>
+							</volist>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">创建人</label>
+					<div class="col-sm-3">
+						{$creator_user_name}
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">更多说明</label>
+					<div class="col-sm-8">
+						<textarea name="description" class="form-control" cols="80" style="min-height:150px;"></textarea>
+					</div>
+				</div>
+				<p class="form-title">
+					考核内容
+				</p>
+				<div class="form-group">
+					<label for="insurance_type" class="col-sm-2 control-label">考核详细</label>
+					<div class="col-sm-9" id="itembox">
+						<table class="table table-bordered">
+							<tr>
+								<td>名称</td>
+								<td>标准分</td>
+								<td>评分范围</td>
+								<td>评分细则</td>
+								<td width="1%"><input type="button" id="additem" class="btn btn-primary btn-xs" value="+" /></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label"></label>
+					<div class="col-sm-3">
+						<input name="submit" class="btn btn-primary" type="submit" value="保存"/>&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="button" class="btn" value="取消" onclick="javascript:history.go(-1);"/>
+					</div>
+				</div>
+			</form>	
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script>
+	/**
+	 * 添加绩效考核评分细则
+	**/
+	$(function(){
+		var num = 1;
+		$('#additem').click(function(){
+			var str = '<tr><td>';
+			str += '<input type="text" name="score_name['+num+']"/></td><td><input  type="text" name="standard_score['+num+']"/></td><td><input type="text" name="low_scope['+num+']" />&nbsp;至&nbsp;<input type="text" name="high_scope['+num+']" /></td><td><textarea name="score_description['+num+']" /></td><td width="1%"><input type="button" class="btn btn-primary btn-xs deleteitem" value="-" /></td></tr>';
+			$(this).parent().parent().parent().append(str);
+			num++;
+		});
+		$('#itembox').on('click','.deleteitem',function(){
+			$(this).parent().parent().remove();
+		});
+	});
+</script>
+<include file="Core:Public:alert" />
+<include file="Core:Public:footer" />

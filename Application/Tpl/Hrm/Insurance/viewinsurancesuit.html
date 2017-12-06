@@ -1,0 +1,71 @@
+<include file="Core:Public:header" />
+{:W('Navigation')}
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">社保套帐</div>
+		<div class="row-table-body">
+			<p class="form-title">
+				<a class="pull-right btn btn-primary btn-xs" href="{:U('hrm/insurance/insurancesuit')}" style="margin-left:10px;">社保套帐</a>
+				<a class="pull-right btn btn-primary btn-xs" href="{:U('hrm/insurance/editinsurancesuit','id='.$info['insurance_suit_id'])}">编辑</a>
+				社保套帐&nbsp;&nbsp;
+				<a href="javascript:history.go(-1);">返回</a>
+			</p>
+			<div class="form-group">
+				<label for="name" class="col-sm-2 control-label">名称</label>
+				<div class="col-sm-3">
+					{$info.name}
+				</div>
+			</div>
+			<div class="clear"></div>
+			<div class="form-group">
+				<label for="insurance_type" class="col-sm-2 control-label">套帐项目</label>
+				<div class="col-sm-8" id="itembox">
+					<table class="table table-bordered">
+						<tr>
+							<td>项目</td>
+							<td>缴费基数</td>
+							<td>单位缴费</td>
+							<td>个人缴费</td>
+						</tr>
+						<volist name="info.items" id="v" key="k">
+						<tr>
+							<td>
+								{$insuranceitem[$v['item']]['name']}
+							</td>
+							<td>
+								{$v.base}
+							</td>
+							<td>
+								{$v.paybycom}<if condition="$v['paybycomtype'] == 1">%<elseif condition="$v['paybycomtype'] == 2"/>￥</if>
+							</td>
+							<td>
+								{$v.paybyper}<if condition="$v['paybypertype'] == 1">%<elseif condition="$v['paybypertype'] == 2"/>￥</if>
+							</td>
+						</tr>
+						</volist>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+	$(function(){
+		var num = {:count($info['items'])} +1 ;
+		$('#additem').click(function(){
+			var str = '<tr><td><select name="item['+num+']">';
+			<volist name="insuranceitem" id="vo">
+			str +='<option value="{$vo.insurance_item_id}">{$vo.name}</option>';
+			</volist>
+			str += '</select></td><td><input size="5" type="text" name="base['+num+']"/></td><td><input size="5" type="text" name="paybycom['+num+']" /><select name="paybycomtype['+num+']"><option value="1">百分比</option><option value="2">定额</option></select></td><td><input size="5" type="text" name="paybyper['+num+']" /><select name="paybypertype['+num+']"><option value="1">百分比</option><option value="2">定额</option></select></td><td width="1%"><input type="button" class="btn btn-primary btn-xs deleteitem" value="-" /></td></tr>';
+			$(this).parent().parent().parent().append(str);
+			num++;
+		});
+		$('#itembox').on('click','.deleteitem',function(){
+			$(this).parent().parent().remove();
+		});
+	});
+</script>
+<include file="Core:Public:alert" />
+<include file="Core:Public:footer" />

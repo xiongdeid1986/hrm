@@ -1,0 +1,25 @@
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h4 class="modal-title" id="myModalLabel">绩效考核得分详情</h4>
+		</div>
+		<div class="modal-body form-horizontal">
+			<table class="table table-bordered">
+				<tr>
+					<td>考核内容名称</td>
+					<td>得分</td>
+				</tr>
+				<volist name="appraisalmanager['template']['score']" id="vo">
+				<tr>
+					<td>{$vo.name}</td>
+					<td>{$preSocreAvgPoint[$vo['score_id']]}</td>
+				</tr>
+				</volist>
+			</table>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,170 @@
+<include file="Core:Public:header" />
+{:W('Navigation')}
+<script src="__PUBLIC__/js/datepicker/WdatePicker.js"></script>
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">加班管理</div>
+		<div class="row-table-body">
+			<p class="form-title">
+				加班管理&nbsp;&nbsp;
+				<a href="{:U('hrm/overtime/category')}">加班类型管理</a>
+				<a href="{:U('hrm/overtime/add')}" class="pull-right btn btn-primary btn-xs" >添加</a>
+				<form id="search_form" action="" method="get">
+					<input type="hidden" name="g" value="hrm"/>
+					<input type="hidden" name="m" value="overtime"/>
+					<div class="form-inline" >
+						<div class="form-group">
+							<label for="search_user_name">员工姓名</label>
+							<input type="text" class="form-control" id="search_user_name" name="search_user_name" />
+						</div>&nbsp;&nbsp;
+						<div class="form-group">
+							<label for="search_status">状态</label>
+							<select class="form-control" id="search_status" name="search_status">
+								<option value="">全部</option>
+								<option value="0">处理中</option>
+								<option value="1">已通过</option>
+								<option value="2">未通过</option>
+							</select>
+						</div>&nbsp;&nbsp;
+						<div class="form-group">
+							<label for="search_category">类型</label>
+							<select class="form-control" id="search_category" name="search_category">
+								<option value="">全部</option>
+								<option value="1">正常加班</option>
+								<option value="2">周末加班</option>
+								<option value="3">法定节假日加班</option>
+							</select>
+						</div>&nbsp;&nbsp;
+						<div class="form-group">
+							<input type="text" class="form-control" id="search_start_time" name="search_start_time" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" placeholder="开始日期"/>&nbsp;-&nbsp;
+							<input type="text" class="form-control" id="search_end_time" name="search_end_time" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" placeholder="结束日期"/>
+						</div>
+						<input type="button" class="btn search_btn" value="搜索" />
+					</div>
+				</form>
+			</p>
+			<if condition="empty($overtimelist)">
+				<div>---暂无数据---</div>
+			<else />
+			<form class="form-horizontal " id="form1"  method="post">
+				<table class="table" style="margin-bottom:0px;">
+					<tbody>
+						<tr>
+							<th><input type="checkbox" name="overtime_id[]" id="check_all"/></th>
+							<th>加班人</th>
+							<th>填写人</th>
+							<th>状态</th>
+							<th>加班类型</th>
+							<th>加班时间</th>
+							<th>天数</th>
+							<th>小时</th>
+							<th>结算方式</th>
+							<th>计时费用(元)</th>
+							<th>创建时间</th>
+							<th>操作</th>
+						</tr>
+						<volist name="overtimelist" id="vo">
+						<tr>
+							<td><input type="checkbox" name="id[]" class="check_list" value="{$vo.overtime_id}" /></td>
+							<td>{$vo.user_name}</td>
+							<td>{$vo.maker_user_name}</td>
+							<td>
+								<if condition="'0' eq $vo['status']">
+									<span style="color:#F8971C">{$vo.status_name}</span>
+								<elseif condition="'1' eq $vo['status']" />
+									<span style="color:#0EB930">{$vo.status_name}</span>
+								<else />
+									<span style="color:#FF3908;">{$vo.status_name}</span>
+								</if>
+							</td>
+							<td>{$vo.category.name}</td>
+							<td>{$vo.start_time|date='Y-m-d H:i',###}&nbsp;至&nbsp;{$vo.end_time|date='Y-m-d H:i',###}</td>
+							<td>{$vo.overtime_days}</td>
+							<td>{$vo.overtime_hours}</td>
+							<td>{$vo.type_name}</td>
+							<td>{$vo.overtime_payment}</td>
+							<td>{$vo.create_time|date='Y-m-d H:i:s',###}</td>
+							<td>
+								<a href="{:U('hrm/overtime/view','id='.$vo['overtime_id'])}">查看</a>&nbsp;|&nbsp;
+								<a href="{:U('hrm/overtime/edit','id='.$vo['overtime_id'])}">编辑</a>&nbsp;|&nbsp;
+								<a href="{:U('hrm/overtime/delete','id='.$vo['overtime_id'])}">删除</a>
+							</td>
+						</tr>
+						</volist>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td colspan="12">
+								<select name="status" id="select_status">
+									<option value="0" selected="selected">审核中</option>
+									<option value="1">已通过</option>
+									<option value="2">未通过</option>
+								</select>&nbsp;&nbsp;
+								<input class="btn btn-primary btn-xs" type="submit" id="delete" value="删除"/>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="12" align="center">{$page}<div class="clear"></div></td>
+						</tr>
+					</tfoot>
+				</table>
+			</form>
+			</if>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+	/**
+	 * 全选
+	 **/
+	$("#check_all").click(function(){
+		$("input[class='check_list']").prop('checked',$(this).prop('checked'));
+	});
+	
+	/**
+	 * 批量删除
+	 **/
+	$("#delete").click(function(){
+		if(confirm('确定要删除吗？')){
+			$("#form1").attr("action","{:U('hrm/overtime/delete')}");
+			$("#form1").submit();
+		}
+	});
+	/**
+	 * 批量审核
+	 **/
+	$("#select_status").change(function(){
+		if(confirm('确定要批量审核吗？')){
+			$("#form1").attr("action","{:U('hrm/overtime/auditing')}");
+			$("#form1").submit();
+		}
+	});
+	
+	$('#search_user_name').prop('value', '{$Think.get.search_user_name}');
+	$('#search_status').prop('value', '{$Think.get.search_status}');
+	$("#search_category option[value='{$Think.get.search_category}']").prop('selected', true);
+	$('#search_start_time').prop('value', '{$Think.get.search_start_time}');
+	$('#search_end_time').prop('value', '{$Think.get.search_end_time}');
+	
+	/**
+	 * 单击提交搜索表单
+	 * 双击清空搜索项
+	 **/
+	$(function(){
+		var TimeFn = null;
+		$('.btn.search_btn').click(function () {
+			clearTimeout(TimeFn);
+			TimeFn = setTimeout(function(){
+				$('#search_form').submit();
+			},300);
+		});
+		
+		$('.btn.search_btn').dblclick(function () {
+			clearTimeout(TimeFn);
+			window.location.href="{:U('hrm/overtime/index')}";
+		})
+	});
+</script>
+<include file="Core:Public:alert" />
+<include file="Core:Public:footer" />

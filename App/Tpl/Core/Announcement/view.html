@@ -1,0 +1,45 @@
+<include file="Core:Public:header" />
+{:W('Navigation')}
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">公告详情</div>
+		<div class="row-table-body form-horizontal">
+			<p class="form-title">
+				公告详情&nbsp;&nbsp;<a href="javascript:history.go(-1);">返回</a>
+			</p>
+			<div class="form-group">
+				<label for="name" class="col-sm-2 control-label">公告标题</label>
+				<div class="col-sm-3" style="color:#{$announcement.color}">{$announcement.title}</div>
+			</div>
+			<div class="form-group">
+				<label for="name" class="col-sm-2 control-label">发布人</label>
+				<div class="col-sm-3">{$announcement.creator_user_name}</div>
+			</div>
+			<div class="form-group">
+				<label for="name" class="col-sm-2 control-label">发布时间</label>
+				<div class="col-sm-3">{$announcement.create_time|date='Y-m-d H:i:s',###}</div>
+				<label for="name" class="col-sm-2 control-label">更新时间</label>
+				<div class="col-sm-3"><if condition="!empty($announcement['update_time'])">{$announcement.update_time|date='Y-m-d H:i:s',###}</if></div>
+			</div>
+			<div class="form-group">
+				<label for="name" class="col-sm-2 control-label">状态</label>
+				<div class="col-sm-3">{$announcement.status_name}</div>
+				<label for="name" class="col-sm-2 control-label">顶置</label>
+				<div class="col-sm-3">{$announcement.set_top_name}</div>
+			</div>
+			<div class="form-group">
+				<label for="name" class="col-sm-2 control-label">通知部门</label>
+				<div class="col-sm-3">{$announcement.department_name}</div>
+			</div>
+			<div class="form-group">
+				<label for="name" class="col-sm-2 control-label">公告内容</label>
+				<div class="col-sm-8">
+					<pre style="min-height:150px;">{$announcement.content}</pre>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<include file="Core:Public:alert" />
+<include file="Core:Public:footer" />

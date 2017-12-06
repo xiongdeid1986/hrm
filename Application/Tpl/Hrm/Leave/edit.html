@@ -1,0 +1,84 @@
+<include file="Core:Public:header" />
+{:W('Navigation')}
+<script src="__PUBLIC__/js/datepicker/WdatePicker.js"></script>
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">编辑请假条</div>
+		<div class="row-table-body">
+			<form class="form-horizontal " action="{:U('hrm/leave/edit')}" method="post">
+				<input type="hidden" name="id" value="{$leave.leave_id}"/>
+				<p class="form-title">编辑请假条&nbsp;&nbsp;<a href="javascript:history.go(-1);">返回</a></p>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">请假人</label>
+					<div class="col-sm-3">
+						<input type="hidden" name="user_id" id="str_user_id" value="{$leave.user_id}" />
+						<input class="form-control" type="text" name="user_name" id="str_user_name" readonly="true" value="{$leave.user_name}"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">类型</label>
+					<div class="col-sm-3">
+						<select class="form-control" name="leave_category_id">
+							<option value="1" <if condition="'1' eq $leave['leave_category_id']">selected="selected"</if>>事假</option>
+							<option value="2" <if condition="'2' eq $leave['leave_category_id']">selected="selected"</if>>病假</option>
+							<option value="3" <if condition="'3' eq $leave['leave_category_id']">selected="selected"</if>>出差</option>
+							<option value="4" <if condition="'4' eq $leave['leave_category_id']">selected="selected"</if>>婚假</option>
+							<option value="5" <if condition="'5' eq $leave['leave_category_id']">selected="selected"</if>>产假</option>
+							<option value="6" <if condition="'6' eq $leave['leave_category_id']">selected="selected"</if>>年假</option>
+							<option value="7" <if condition="'7' eq $leave['leave_category_id']">selected="selected"</if>>丧假</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">开始时间</label>
+					<div class="col-sm-3">
+						<input class="form-control" type="text" name="start_time" id="d4311" onFocus="WdatePicker({maxDate:$('#d4312').val(),minDate:'%y-%M-%d %H:%m:%s', dateFmt:'yyyy-MM-dd HH:mm:ss'})" value="{$leave.start_time|date='Y-m-d H:i:s',###}"/>
+					</div>
+					<label for="name" class="col-sm-2 control-label">结束时间</label>
+					<div class="col-sm-3">
+						<input class="form-control" type="text" name="end_time" id="d4312" onFocus="WdatePicker({minDate:$('#d4311').val(),maxDate:'2020-10-01',dateFmt:'yyyy-MM-dd HH:mm:ss'})" value="{$leave.end_time|date='Y-m-d H:i:s',###}"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">计算结果</label>
+					<div class="col-sm-3">
+						共<span>0</span>天<span>8</span>小时
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">填写人</label>
+					<div class="col-sm-3">
+						{$leave.maker_user_name}
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">请假原因</label>
+					<div class="col-sm-8">
+						<textarea name="content" class="col-sm-6 form-control" style="min-height:150px;">{$leave.content}</textarea>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label"></label>
+					<div class="col-sm-3">
+						<input name="submit" class="btn btn-primary" type="submit" value="保存"/>&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="button" class="btn" value="取消" onclick="javascript:history.go(-1);"/>
+					</div>
+				</div>
+			</form>	
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<script>
+	/**
+	 * 选择员工
+	 **/
+	$('#str_user_name').click(function(){
+		$('#alert').modal({
+			show:true,
+			remote:'{:U("core/user/getSubUserCBDialog","self=1")}'
+		});
+	});
+</script>
+<include file="Core:Public:alert" />
+<include file="Core:Public:footer" />

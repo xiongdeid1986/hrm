@@ -1,0 +1,123 @@
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h4 class="modal-title" id="myModalLabel">选择员工</h4>
+		</div>
+		<div class="modal-body">
+			<div class="form-inline" >
+				<div class="form-group">
+					<label for="department">部门</label>
+					<select class="form-control" id="department">
+						<option value="0">全部</option>
+						<volist name="department_list" id="vo">
+						<option value="{$vo.department_id}">{$vo.name}</option>
+						</volist>
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="positions">岗位</label>
+					<select class="form-control" id="positions">
+						<option value="0">全部</option>
+					</select>
+				</div>
+			</div>
+			<table class="table" id="users_list" style="margin-bottom:0px;">
+				<thead>
+					<tr>
+						<th>&nbsp;</th>
+						<th>用户名</th>
+						<th>性别</th>
+						<th>部门 - 岗位</th>
+						<th>手机</th>
+						<th>Email</th>
+					</tr>
+				</thead>
+				<tbody>
+					<volist name="userlist" id="vo">
+					<tr>
+						<td><input type="radio" name="r_user_id" value="{$vo.user_id}"></td>
+						<td>{$vo.name}</td>
+						<td><if condition="$vo['sex'] == 1">男<elseif condition="$vo['sex'] == 2" />女<else />未知</if></td>
+						<td>{$vo.department_name} - {$vo.position_name}</td>
+						<td>{$vo.telephone}</td>
+						<td>{$vo.email}</td>
+					<tr>
+					</volist>
+				</tbody>
+			</table>
+		</div>
+		<div class="modal-footer">
+			<input type="button" class="btn btn-primary" id="check_ed" value="确定" />
+			<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	$(function(){
+		$('#check_ed').click(function(){
+			var str = $("input[name='r_user_id']:checked").val();
+			var name = $("input[name='r_user_id']:checked").parent().next().html();
+			$('#to_name').val(name);
+			$('#to_user_id').val(str);
+			$('#alert').modal('hide');
+		});
+		$('#department').change(function(){
+			var department_id = $(this).val();
+			$.get('{:U("hrm/structure/getdepartmentposition","id=")}'+department_id,function(data){
+				if(data){
+					var options = '<option value="0">全部</option>';
+					$.each(data, function(k, v){
+						options += '<option value="'+v.position_id+'">'+v.name+'</option>';
+					});
+					$("#positions").html(options);
+				}else{
+					$("#positions").html('<option value="0">全部</option>');
+				}
+			},'json');
+			$.get('{:U("core/user/getdepartmentuser","id=")}'+department_id,function(user_list){
+				if(user_list){
+					var user_str = '';
+					$.each(user_list, function(k, v){
+						var sex = v.sex == 1 ? '男':'女';
+						user_str += '<tr><td><input type="radio" value="'+v.user_id+'" name="r_user_id"></td><td>'+v.name+'</td><td>'+sex+'</td><td>'+v.department_name+'-'+v.position_name+'</td><td>'+v.telephone+'</td><td>'+v.email+'</td></tr>';
+					});
+					$("#users_list tbody").html(user_str);
+				}else{
+					$("#users_list tbody").html('');
+				}
+			},'json');
+		});
+		$('#positions').change(function(){
+			var position_id = $(this).val();
+			if(position_id == 0){
+				var department_id = $('#department').val();
+				$.get('{:U("core/user/getdepartmentuser","id=")}'+department_id,function(user_list){
+					if(user_list){
+						var user_str = '';
+						$.each(user_list, function(k, v){
+							var sex = v.sex == 1 ? '男':'女';
+							user_str += '<tr><td><input type="radio" value="'+v.user_id+'" name="r_user_id"></td><td>'+v.name+'</td><td>'+sex+'</td><td>'+v.department_name+'-'+v.position_name+'</td><td>'+v.telephone+'</td><td>'+v.email+'</td></tr>';
+						});
+						$("#users_list tbody").html(user_str);
+					}else{
+						$("#users_list tbody").html('');
+					}
+				},'json');
+			}else{
+				$.get('{:U("core/user/getpositionuser","id=")}'+position_id,function(user_list){
+					if(user_list){
+						var user_str = '';
+						$.each(user_list, function(k, v){
+							var sex = v.sex == 1 ? '男':'女';
+							user_str += '<tr><td><input type="radio" value="'+v.user_id+'" name="r_user_id"></td><td>'+v.name+'</td><td>'+sex+'</td><td>'+v.department_name+'-'+v.position_name+'</td><td>'+v.telephone+'</td><td>'+v.email+'</td></tr>';
+						});
+						$("#users_list tbody").html(user_str);
+					}else{
+						$("#users_list tbody").html('');
+					}
+				},'json');
+			}
+		});
+	});
+</script>

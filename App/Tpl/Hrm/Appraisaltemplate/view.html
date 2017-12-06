@@ -1,0 +1,60 @@
+<include file="Core:Public:header" />
+{:W('Navigation')}
+<div class="body-right">
+	<div class="row-table">
+		<div class="row-table-title">绩效考核模板详情</div>
+		<div class="row-table-body form-horizontal">
+			<p class="form-title">
+				绩效考核模板详情&nbsp;&nbsp;
+				<a href="{:U('hrm/appraisaltemplate/edit','id='.$appraisal_template['appraisal_template_id'])}">编辑</a>&nbsp;&nbsp;
+				<a href="javascript:history.go(-1);">返回</a>&nbsp;&nbsp;
+				<a href="{:U('hrm/appraisaltemplate/index')}">返回上级</a>&nbsp;&nbsp;
+			</p>
+			<div class="form-group">
+				<label for="name" class="col-sm-2 control-label">模板名称</label>
+				<div class="col-sm-3">{$appraisal_template.name}</div>
+			</div>
+			<div class="form-group">
+				<label for="name" class="col-sm-2 control-label">类型</label>
+				<div class="col-sm-3">{$appraisal_template.category.name}</div>
+			</div>
+			<div class="form-group">
+				<label for="name" class="col-sm-2 control-label">创建人</label>
+				<div class="col-sm-3">{$appraisal_template.creator_user_name}</div>
+			</div>
+			<div class="form-group">
+				<label for="name" class="col-sm-2 control-label">更多说明</label>
+				<div class="col-sm-8">
+					<pre name="description" class="col-sm-8"style="min-height:150px;">{$appraisal_template.description}</pre>
+				</div>
+			</div>
+			<p class="form-title">
+				考核内容
+			</p>
+			<div class="form-group">
+				<label for="insurance_type" class="col-sm-2 control-label">考核详细</label>
+				<div class="col-sm-9" id="itembox">
+					<table class="table table-bordered">
+						<tr>
+							<td>名称</td>
+							<td>标准分</td>
+							<td>评分范围</td>
+							<td>评分细则</td>
+						</tr>
+						<volist name="appraisal_template['score']" id="vo">
+						<tr>
+							<td>{$vo.name}</td>
+							<td>{$vo.standard_score}</td>
+							<td>{$vo.low_scope}&nbsp;至&nbsp;{$vo.high_scope}</td>
+							<td>{$vo.description}</td>
+						</tr>
+						</volist>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+<include file="Core:Public:alert" />
+<include file="Core:Public:footer" />
